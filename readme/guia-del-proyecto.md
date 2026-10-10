@@ -360,3 +360,97 @@ Regístrate, crea un gasto, abre Presupuesto y prueba el chat con la IA y el bot
 
 ### 9.10 Actualizar la app después
 Cada `git push` a `main` hace que Render vuelva a desplegar solo. Si cambias la estructura de la base de datos, vuelve a ejecutar `npm run exportar-bd` en local y `npm run importar-bd` contra la base de Aiven (el importador solo crea lo que falta; para cambios en tablas ya existentes habría que hacer un `ALTER TABLE` manual).
+
+
+### 9.11 Explicación detallada para principiantes
+
+#### Qué significa "desplegar"
+Ahora mismo tu aplicación **solo existe en tu computador**: XAMPP hace de servidor de base de datos, Node (`npm run dev`) hace de servidor de la aplicación y tu navegador es quien la usa. Si apagas el computador, nadie más puede entrar.
+
+Desplegar es **prestar computadores en internet que estén encendidos las 24 horas** y poner tu aplicación en ellos. Necesitamos dos:
+
+| Pieza | En tu computador | En internet | Qué hace |
+|---|---|---|---|
+| Base de datos | MySQL de XAMPP | **Aiven** | Guarda usuarios, gastos, metas, etc. |
+| Aplicación | `npm run dev` (Node) | **Render** | Atiende las páginas y la API |
+| Navegador | El tuyo | El de cada visitante | Muestra las páginas |
+
+Se necesitan **dos servicios** porque Render (plan gratuito) no incluye una base MySQL; por eso la base va en Aiven.
+
+#### Qué es el GitHub y por qué importa
+Render **no copia archivos desde tu computador**: los descarga de GitHub. Por eso subimos el código a https://github.com/lauratrujillo774/Ahorra-y-Prospera. Cada vez que hagas `git push`, Render descarga la versión nueva y vuelve a publicar.
+
+#### Qué son las "variables de entorno" y por qué el `.env` no se sube
+El archivo `backend/.env` contiene tus **secretos** (contraseña de la base, clave de Gemini, contraseña de Gmail). Si estuviera en GitHub, cualquiera podría usarlos. Por eso el `.gitignore` lo deja fuera. En internet esos mismos valores se escriben **en el panel de Render** (sección *Environment*), donde quedan guardados en privado. La aplicación los lee igual que lee el `.env`.
+
+#### Paso 1 — La base de datos en Aiven (≈10 minutos)
+1. Entra a https://aiven.io y crea una cuenta (puedes usar Google).
+2. Pulsa para crear un servicio nuevo y elige **MySQL**.
+3. Elige el plan **Free** (gratuito) y una región cualquiera (la más cercana a Colombia suele ser la de EE. UU. este). Ponle un nombre, por ejemplo `ahorra-mysql`.
+4. Espera unos minutos hasta que el estado diga **Running**.
+5. En la página del servicio verás la información de conexión. Anota estos cinco datos (los necesitarás dos veces):
+   - **Host**: algo como `ahorra-mysql-tuusuario.aivencloud.com`
+   - **Port**: un número, por ejemplo `12345`
+   - **User**: normalmente `avnadmin`
+   - **Password**: una cadena larga (hay un botón para mostrarla)
+   - **Database name**: normalmente `defaultdb`
+6. Revisa que el acceso no esté restringido por direcciones IP (por defecto permite todas). Si no, la app en Render no podrá conectar.
+
+#### Paso 2 — Crear las tablas en esa base (≈2 minutos)
+La base de Aiven nace **vacía**: no tiene tus tablas. El archivo `backend/database/esquema.sql` las describe todas, y el comando `npm run importar-bd` las crea. Lo haces **desde tu computador**, apuntando a Aiven:
+
+1. Abre PowerShell y entra a la carpeta del proyecto: `cd "C:\Users\Asus\Downloads\ahorra y prospera.. version oficial\ahorra y prospera.. version oficial\backend"`
+2. Escribe estos comandos, uno por uno, cambiando lo que está entre comillas por los datos de Aiven:
+   ```
+   $env:MYSQL_HOST="el-host-de-aiven"
+   $env:MYSQL_PORT="el-puerto"
+   $env:MYSQL_USER="avnadmin"
+   $env:MYSQL_PASSWORD="la-contraseña"
+   $env:MYSQL_DATABASE="defaultdb"
+   $env:MYSQL_SSL="true"
+   npm run importar-bd
+   ```
+   Cada línea `$env:...` solo vale para **esa ventana** de PowerShell y no toca tu `.env`; así el comando usa Aiven y no tu base local.
+3. Debe imprimir: `Importación completa sin errores. Ahora hay 30 tablas y 4 triggers.` Si imprime líneas con ✖, copia el mensaje.
+4. **Cierra la ventana de PowerShell** al terminar, para que la contraseña no quede en memoria de esa sesión.
+
+**Importante:** esto crea la *estructura* y los catálogos, pero **no copia tus usuarios ni tus gastos de prueba**. En internet empezarás con cero usuarios y te registrarás de nuevo.
+
+#### Paso 3 — Publicar la aplicación en Render (≈10 minutos)
+1. Entra a https://render.com y crea una cuenta con tu GitHub (autoriza que lea tus repositorios).
+2. Arriba a la derecha: **New +** → **Blueprint**. Un *Blueprint* es una receta: Render lee el archivo `render.yaml` del repositorio y ya sabe qué hacer.
+3. Elige el repositorio `Ahorra-y-Prospera` y continúa.
+4. Render te mostrará la lista de variables que dejé sin valor. Escribe los valores (están en la tabla de la sección 9.5). Los más importantes:
+   - `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`: los de Aiven.
+   - `APP_URL`: aún no sabes la dirección; escribe cualquier cosa y la corriges luego.
+   - `GOOGLE_CLIENT_ID`, `GEMINI_API_KEY`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`: los mismos que usas en local (con una clave de Gemini nueva).
+5. Pulsa el botón para crear. Render empieza a **construir** (descarga el código, instala las dependencias con `npm install`) y luego **arranca** con `node app.js`. Puedes ver el avance en la pestaña **Logs**.
+6. Cuando el estado diga **Live** verás arriba una dirección como `https://ahorra-y-prospera-xxxx.onrender.com`. Esa es **la dirección pública de tu app**.
+7. Ve a **Environment**, edita `APP_URL` poniendo esa dirección (sin barra al final) y guarda. Render reiniciará la app.
+
+#### Paso 4 — Comprobar que todo conecta
+1. Abre `https://TU-DIRECCION/salud`. Debe mostrar `{"servidor":"ok","baseDeDatos":"ok"}`. El `baseDeDatos: ok` significa que Render sí llegó a Aiven.
+2. Abre `https://TU-DIRECCION` (la página de inicio), crea una cuenta y registra un gasto.
+3. La **primera visita** puede tardar cerca de un minuto: en el plan gratuito la app se "duerme" cuando nadie la usa y debe despertar.
+
+#### Paso 5 — El botón de Google
+Google solo acepta el inicio de sesión desde las direcciones que tú autorices. En https://console.cloud.google.com/apis/credentials abre tu **ID de cliente de OAuth 2.0**, busca **Orígenes autorizados de JavaScript**, pulsa *Agregar URI* y pega `https://TU-DIRECCION` (sin barra al final). Guarda y espera unos minutos.
+
+#### Si algo sale mal
+| Qué ves | Qué significa | Qué hacer |
+|---|---|---|
+| El importador dice `Access denied` | Usuario o contraseña de Aiven mal copiados | Vuelve a copiarlos sin espacios; la contraseña distingue mayúsculas |
+| El importador dice `ETIMEDOUT` o `ECONNREFUSED` | No alcanza el servidor de la base | Revisa host y puerto; confirma que el servicio de Aiven esté *Running* y sin restricción de IP |
+| El importador dice `ER_ACCESS_DENIED` al crear triggers o algo con `SUPER` | La base gestionada limita los triggers | Avísame: hay que mover esa lógica al código |
+| Render: *Build failed* | Falló la instalación | Mira **Logs**; verifica que el repositorio tenga la carpeta `backend` y su `package.json` |
+| Render: se queda en *Deploying* o dice *Failed* al arrancar | La app se cae al iniciar | Casi siempre es una variable de la base mal escrita; los **Logs** muestran "No se pudo conectar a MySQL: …" |
+| `/salud` dice `baseDeDatos: error` | La app no llega a Aiven | Revisa las cinco variables `MYSQL_*` y que `MYSQL_SSL` sea `true` |
+| La página carga pero registrarse da error | Faltan las tablas | Repite el Paso 2 apuntando a Aiven |
+| Google dice `origin_mismatch` | La dirección no está autorizada | Repite el Paso 5 |
+| No llegan correos | Render puede bloquear SMTP en el plan gratuito, o la contraseña de aplicación es incorrecta | Mira los Logs (`[correo] No se pudo enviar…`); la alternativa es un servicio de correo por API |
+
+#### Cuánto cuesta
+Con los planes gratuitos de Render y Aiven, **nada**, pero con las limitaciones de la sección 9.8 (la app se duerme, las fotos no persisten, el correo puede fallar, límites de almacenamiento). Los planes y precios cambian: confírmalos en sus páginas, y verifica si piden una tarjeta para verificar la cuenta.
+
+#### Si solo necesitas mostrarla (sin publicar)
+Para una exposición o una revisión, no es obligatorio desplegar: puedes dejarla corriendo en tu computador (`npm run dev` + XAMPP) y abrirla con `http://localhost:5000`. Desplegar solo hace falta si otras personas deben entrar desde sus propios dispositivos cuando tu computador esté apagado.

@@ -8,7 +8,6 @@
     "dev": "nodemon app.js",
     "exportar-bd": "node database/exportar.mjs",
     "importar-bd": "node database/importar.mjs",
-    "subir-archivos": "node database/subir_archivos.mjs",
     "probar-config": "node scripts/probar-config.mjs"
   },
   "keywords": [],

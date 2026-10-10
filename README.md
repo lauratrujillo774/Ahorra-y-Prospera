@@ -139,3 +139,5 @@ Hay un flujo de ejemplo para importar en n8n (*Import from file*): `docs/n8n/flu
 > Detalle completo de la integración con n8n (qué hay y en qué archivo): [`readme/n8n.md`](readme/n8n.md)
 
 > Guía completa de qué hace cada archivo, cómo funcionan los correos y la IA: [`readme/guia-del-proyecto.md`](readme/guia-del-proyecto.md)
+
+> Despliegue en internet paso a paso (Render + Aiven): sección 9 de [`readme/guia-del-proyecto.md`](readme/guia-del-proyecto.md)

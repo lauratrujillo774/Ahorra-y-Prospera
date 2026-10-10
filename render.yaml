@@ -1,0 +1,42 @@
+# Despliegue en Render (https://render.com): "New + → Blueprint" y elige este repositorio.
+# Los valores marcados sync:false los escribes tú en el panel de Render (no se guardan en GitHub).
+services:
+  - type: web
+    name: ahorra-y-prospera
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node app.js
+    healthCheckPath: /salud
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_PORT
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        sync: false
+      - key: MYSQL_SSL
+        value: "true"
+      - key: APP_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false

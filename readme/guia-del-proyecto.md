@@ -31,9 +31,11 @@ Navegador (frontend)  ──fetch──►  Express (backend)  ──SQL──�
 |---|---|
 | `app.js` | Punto de entrada. Conecta a MySQL, corre las migraciones, inicia el servidor Express y arranca el revisor horario de notificaciones. |
 | `.env` | Configuración secreta (base de datos, claves de Google, de IA, de correo SMTP, de n8n). **No se debe compartir ni subir a internet.** |
-| `package.json` | Lista de dependencias (express, mysql2, cors, express-fileupload, nodemailer, exceljs, pdfkit, dotenv) y de comandos (`npm start`, `npm run dev`, `npm run probar-config`). Ojo: también trae los comandos `exportar-bd`, `importar-bd` y `subir-archivos`, que apuntan a una carpeta `database/` que **no existe** en el proyecto, así que no funcionan. |
+| `package.json` | Lista de dependencias (express, mysql2, cors, express-fileupload, nodemailer, exceljs, pdfkit, dotenv) y de comandos (`npm start`, `npm run dev`, `npm run probar-config`). También trae `exportar-bd` e `importar-bd`, que usan los archivos de `backend/database/` (ver sección 9). |
 | `package-lock.json`, `pnpm-lock.yaml` | Versiones exactas de las dependencias instaladas. Hay uno de npm y otro de pnpm porque se mezclaron gestores; conviene usar solo uno (yo usé npm). |
 | `scripts/probar-config.mjs` | Herramienta de diagnóstico (`npm run probar-config`): prueba de verdad cada IA configurada y manda un correo de prueba para confirmar que el `.env` está bien. |
+| `.env.example` | Plantilla del `.env` con todos los nombres de variables y sin valores (ese sí se puede subir a GitHub). |
+| `database/exportar.mjs`, `importar.mjs`, `esquema.sql` | Exportan e importan la estructura de la base y sus catálogos (se usan para el despliegue; ver sección 9). |
 | `uploads/` | Carpeta donde se guardan las fotos de perfil subidas (el servidor las sirve en `/uploads/...`). |
 
 ### `src/config/`
@@ -258,6 +260,8 @@ Cada consulta con IA se anota en la tabla `consultas_ia`. Cada usuario tiene **2
 | Carpeta/archivo | Qué hay |
 |---|---|
 | `docs/n8n/` | Tres flujos de ejemplo para importar en n8n. |
+| `render.yaml` | Configuración de despliegue en Render (sección 9). |
+| `.gitignore` | Lista de archivos que Git no sube (`.env`, `node_modules`, fotos). |
 | `readme/n8n.md` | Detalle de la integración con n8n. |
 | `readme/guia-del-proyecto.md` | Este documento. |
 | `README.md` | Resumen del proyecto, cómo ejecutarlo y configuraciones (Google, correo, IA, n8n). |
@@ -268,3 +272,91 @@ Cada consulta con IA se anota en la tabla `consultas_ia`. Cada usuario tiene **2
 2. En `backend/`: `npm install` y luego `npm run dev` (o `npm start`).
 3. Abre `http://localhost:5000` (o `frontend/index.html` con Live Server; el backend debe estar encendido).
 4. Diagnóstico de configuración: `npm run probar-config`.
+
+---
+
+## 9. Despliegue en internet (paso a paso)
+
+**Resumen:** el backend de Node sirve también las páginas, así que se despliega **una sola aplicación** (en Render) y una **base de datos MySQL** aparte (en Aiven). Quedan en una sola dirección, por ejemplo `https://ahorra-y-prospera.onrender.com`.
+
+> Yo no puedo crear las cuentas ni iniciar sesión por ti en Render, Aiven ni Google, así que **no pude hacer el despliegue final**. Dejé el código listo y probado en modo producción con una base de datos vacía; los pasos de abajo son los que tienes que hacer tú.
+
+### 9.1 Qué se preparó en el código
+| Archivo | Para qué |
+|---|---|
+| `backend/database/exportar.mjs` (`npm run exportar-bd`) | Genera `esquema.sql` desde tu base local: tablas, vistas, triggers y datos de referencia (monedas, categorías, logros, retos, tipos de inversión, lecciones). **No incluye usuarios ni datos personales.** |
+| `backend/database/esquema.sql` | El resultado: 30 tablas, 7 vistas, 4 triggers y los catálogos. |
+| `backend/database/importar.mjs` (`npm run importar-bd`) | Crea todo eso en la base que esté configurada en `MYSQL_*`. Se puede repetir sin borrar datos. |
+| `render.yaml` | Configuración lista para Render (Blueprint): carpeta `backend`, `npm install`, `node app.js`, chequeo de salud en `/salud`. |
+| `backend/.env.example` | Plantilla con todos los nombres de variables (sin valores). |
+| `.gitignore` | Evita subir `node_modules`, `.env` (tus claves) y las fotos subidas. |
+| `backend/src/server/express.server.js` | Se añadió `trust proxy` para que funcione detrás del proxy de Render. |
+
+Lo que se verificó: importar el esquema en una base vacía (sin errores y repetible), que los triggers funcionen (aportes y deudas), que el servidor arranque con `NODE_ENV=production`, sirva las páginas, permita registrarse y **no sirva** `.env` ni `package.json`.
+
+### 9.2 Paso 1 — Subir el código a GitHub
+Ya está en https://github.com/lauratrujillo774/Ahorra-y-Prospera. Para subir cambios nuevos:
+```
+git add .
+git commit -m "describe el cambio"
+git push
+```
+
+### 9.3 Paso 2 — Crear la base de datos en la nube (Aiven)
+1. Crea una cuenta en https://aiven.io y un servicio **MySQL** con el plan **Free**.
+2. Cuando esté en estado *Running*, copia de la pestaña *Overview*: **Host**, **Port**, **User** (normalmente `avnadmin`), **Password** y **Database name** (normalmente `defaultdb`).
+3. Aiven exige conexión segura (SSL); la app ya lo soporta con `MYSQL_SSL=true`.
+
+### 9.4 Paso 3 — Crear las tablas en esa base
+En PowerShell, dentro de la carpeta `backend` del proyecto (cambia los valores por los de Aiven):
+```
+$env:MYSQL_HOST="tu-host.aivencloud.com"
+$env:MYSQL_PORT="12345"
+$env:MYSQL_USER="avnadmin"
+$env:MYSQL_PASSWORD="tu-contraseña"
+$env:MYSQL_DATABASE="defaultdb"
+$env:MYSQL_SSL="true"
+npm run importar-bd
+```
+Debe terminar con "Importación completa sin errores. Ahora hay 30 tablas y 4 triggers." Después **cierra esa ventana de PowerShell** para que esas variables (con tu contraseña) no queden guardadas.
+- Si falla al crear los **triggers**, es que la base gestionada no te deja crearlos; en ese caso los aportes a metas y los pagos de deudas no actualizarían saldos y habría que mover esa lógica al código (avísame y lo hago).
+
+### 9.5 Paso 4 — Publicar la aplicación en Render
+1. Crea una cuenta en https://render.com e inicia sesión con tu GitHub.
+2. **New + → Blueprint**, elige el repositorio `Ahorra-y-Prospera` y confirma (Render lee `render.yaml`). *(Alternativa manual: New + → Web Service → mismo repositorio, Root Directory `backend`, Build Command `npm install`, Start Command `node app.js`, plan Free.)*
+3. Render pedirá los valores de las variables. Pon:
+
+| Variable | Valor |
+|---|---|
+| `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` | Los de Aiven (paso 2) |
+| `MYSQL_SSL` | `true` |
+| `APP_URL` | La dirección que te dé Render, p. ej. `https://ahorra-y-prospera.onrender.com` (si aún no la sabes, déjala y edítala después del primer despliegue) |
+| `GOOGLE_CLIENT_ID` | El mismo que usas en local |
+| `GEMINI_API_KEY` | Tu clave de Gemini (de preferencia una nueva; la anterior apareció en el chat) |
+| `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Tu Gmail, la contraseña de aplicación y el remitente |
+| `PORT` | **No la pongas**: Render la asigna sola |
+
+4. Pulsa **Apply / Create** y espera a que el estado diga *Live* (unos minutos). Abre la dirección que te muestra.
+5. Comprueba `https://TU-DIRECCION/salud`: debe responder `{"servidor":"ok","baseDeDatos":"ok"}`.
+
+### 9.6 Paso 5 — Que funcione el acceso con Google
+En https://console.cloud.google.com/apis/credentials abre tu ID de cliente de OAuth y en **Orígenes autorizados de JavaScript** agrega la dirección de Render (`https://TU-DIRECCION`, sin barra al final). Guarda y espera unos minutos.
+
+### 9.7 Paso 6 — Probar
+Regístrate, crea un gasto, abre Presupuesto y prueba el chat con la IA y el botón de Google. Si algo falla, mira **Logs** en el panel de Render.
+
+### 9.8 Límites del plan gratuito (importante)
+- **Se duerme:** Render suspende la app tras unos 15 minutos sin visitas; la primera visita después tarda cerca de un minuto. Mientras duerme **no corre la revisión horaria de alertas** (campanita y correos). Para alertas confiables hace falta un plan de pago o un servicio externo que la "despierte" (por ejemplo, n8n llamando a `/salud` cada 10 minutos).
+- **Fotos de perfil:** el disco gratuito de Render es temporal; las fotos subidas se pierden al redesplegar o reiniciar. Para que duren hace falta un disco persistente (de pago) o guardarlas en la base de datos o en un servicio de archivos (puedo implementarlo).
+- **Correos:** Render puede bloquear la salida SMTP en el plan gratuito, y entonces las alertas llegarían solo a la campanita. La solución es usar un servicio de envío por API (Brevo, Resend…) o un plan de pago; hoy el código usa solo SMTP.
+- **Aiven gratuito:** revisa sus límites vigentes (almacenamiento y posible apagado por inactividad).
+- Los límites y precios de Render y Aiven cambian; confírmalos en sus páginas antes de depender de ellos.
+
+### 9.9 Seguridad antes de publicar
+- Nunca subas el `.env` (ya está en `.gitignore`). Las claves van solo en el panel de Render.
+- Usa una clave nueva de Gemini y cambia cualquier clave que haya aparecido en una conversación.
+- Usa contraseñas largas en Aiven y en `N8N_API_KEY` si activas n8n.
+- Render sirve la app con HTTPS automáticamente.
+
+### 9.10 Actualizar la app después
+Cada `git push` a `main` hace que Render vuelva a desplegar solo. Si cambias la estructura de la base de datos, vuelve a ejecutar `npm run exportar-bd` en local y `npm run importar-bd` contra la base de Aiven (el importador solo crea lo que falta; para cambios en tablas ya existentes habría que hacer un `ALTER TABLE` manual).

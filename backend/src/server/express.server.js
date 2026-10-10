@@ -13,6 +13,8 @@ const raizProyecto = fileURLToPath(new URL('../../../', import.meta.url));
 class Server {
     constructor() {
         this.app = express();
+        // En internet (Render, etc.) hay un proxy delante: así req.ip y el protocolo reales llegan bien
+        this.app.set('trust proxy', 1);
         this.port = process.env.PORT || 3000;
         this.middleware();//las validaciones que necesita la app
         //codigo que se ejecuta antes de que pase algo

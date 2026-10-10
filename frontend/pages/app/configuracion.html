@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="active" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">PERSONALIZA TU CUENTA</p>
+                    <h1>Configuración ⚙</h1>
+                    <p class="muted">Tu foto, tus datos, tu moneda y tu seguridad.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <section class="panel">
+                    <h2>Mi perfil</h2>
+                    <div class="foto-perfil-bloque">
+                        <div class="foto-grande" id="fotoGrande" aria-label="Foto de perfil">US</div>
+                        <div>
+                            <p class="sub" style="margin:0 0 10px">Sube una foto JPG, PNG o WEBP. La recortamos al centro en un círculo y puedes ver cómo queda antes de guardarla.</p>
+                            <input type="file" id="archivoFoto" accept="image/png,image/jpeg,image/webp" hidden>
+                            <div class="acciones-plan"><button class="boton-ap principal chico" type="button" id="cambiarFoto">📷 Subir foto</button><button class="boton-ap suave chico" type="button" id="quitarFoto" hidden>Quitar foto</button></div>
+                            <div class="mensaje-ap" id="mensajeFoto" role="alert"></div>
+                        </div>
+                    </div>
+                    <form id="formPerfil" novalidate>
+                        <div class="rejilla-form">
+                            <div class="campo-ap"><label for="nombres">Nombres</label><input id="nombres" maxlength="80" required></div>
+                            <div class="campo-ap"><label for="apellidos">Apellidos</label><input id="apellidos" maxlength="80" required></div>
+                            <div class="campo-ap"><label for="correo">Correo (no se puede cambiar)</label><input id="correo" disabled></div>
+                            <div class="campo-ap"><label for="correo_auxiliar">Correo auxiliar</label><input type="email" id="correo_auxiliar" maxlength="150"></div>
+                            <div class="campo-ap"><label for="telefono">Teléfono</label><input id="telefono" maxlength="20"></div>
+                            <div class="campo-ap"><label for="fecha_nacimiento">Fecha de nacimiento</label><input type="date" id="fecha_nacimiento"></div>
+                            <div class="campo-ap"><label for="id_moneda">Moneda</label><select id="id_moneda"></select><p class="ayuda-ap">Si la cambias, podrás convertir todos tus valores a la nueva moneda.</p></div>
+                            <div class="campo-ap"><label for="porcentaje">Meta de ahorro mensual (%)</label><input type="number" id="porcentaje" min="0" max="100" step="1"></div>
+                            <div class="campo-ap"><label for="tema">Tema</label><select id="tema"><option value="claro">Claro</option><option value="oscuro">Oscuro</option></select></div>
+                        </div>
+                        <div class="acciones-plan" style="margin-top:20px"><button class="boton-ap principal" type="submit">Guardar cambios</button></div>
+                        <div class="mensaje-ap" id="mensajePerfil" role="alert"></div>
+                    </form>
+                </section>
+                <div class="dos-col">
+                    <section class="panel">
+                        <h2>Cambiar contraseña</h2>
+                        <form id="formClave" novalidate>
+                            <div class="campo-ap" style="margin-bottom:14px"><label for="actual">Contraseña actual</label><input type="password" id="actual" autocomplete="current-password"></div>
+                            <div class="campo-ap" style="margin-bottom:14px"><label for="nueva">Nueva contraseña</label><input type="password" id="nueva" autocomplete="new-password"><p class="ayuda-ap">Mínimo 8 caracteres, con letras y números.</p></div>
+                            <button class="boton-ap principal" type="submit">Actualizar contraseña</button>
+                            <div class="mensaje-ap" id="mensajeClave" role="alert"></div>
+                        </form>
+                    </section>
+                    <section class="panel">
+                        <div class="encabezado-panel"><h2>Sesiones abiertas</h2><button class="boton-ap suave chico" id="cerrarOtras">Cerrar las demás</button></div>
+                        <div id="sesiones"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/configuracion.js"></script>
+</body>
+</html>

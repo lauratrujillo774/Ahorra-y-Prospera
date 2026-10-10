@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA financiera | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="active" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">ASISTENTE INTELIGENTE</p>
+                    <h1>IA financiera ✦</h1>
+                    <p class="muted">Pregunta lo que quieras sobre finanzas e inversiones a tu asesor con inteligencia artificial.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <section class="panel chat">
+                        <div class="encabezado-panel"><div><h2>🤖 Asesor financiero con IA</h2><p class="sub" style="margin:0" id="chatModo">Pregúntame lo que quieras aprender sobre finanzas e inversiones.</p></div></div>
+                        <div class="chat-mensajes" id="chatMensajes" aria-live="polite"></div>
+                        <div class="chat-sugerencias" id="chatSugerencias"></div>
+                        <form class="chat-form" id="chatForm" autocomplete="off">
+                            <input id="chatEntrada" maxlength="1000" placeholder="Ej. ¿Qué es un CDT y cuándo me conviene?" aria-label="Tu pregunta">
+                            <button class="boton-ap principal" type="submit" id="chatEnviar">Enviar</button>
+                        </form>
+                        <p class="ayuda-ap" style="margin-top:10px">Respuestas generadas por IA con fines educativos: no son asesoría financiera personalizada ni garantizan resultados. Verifica siempre las entidades y productos en <a href="https://www.superfinanciera.gov.co" target="_blank" rel="noopener">superfinanciera.gov.co</a>.</p>
+                    </section>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/chat.js"></script>
+</body>
+</html>

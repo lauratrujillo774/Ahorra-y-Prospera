@@ -1,0 +1,15 @@
+# Dependencias (se reinstalan con npm install)
+node_modules/
+
+# Secretos: claves de IA, contraseña del correo, base de datos, Google, n8n
+.env
+.env.*
+!.env.example
+
+# Fotos de perfil subidas por los usuarios
+backend/uploads/
+
+# Archivos del sistema y del editor
+.DS_Store
+Thumbs.db
+*.log

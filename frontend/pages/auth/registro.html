@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<div class="auth">
+    <aside class="auth-lado">
+        <a class="logo" href="../../index.html"><img class="logo-marca" src="../../assets/img/logo-icon.svg" alt="" width="40" height="40"><span>Ahorra<small>y Prospera</small></span></a>
+        <div>
+            <h2>Empieza a ahorrar con propósito</h2>
+            <p>Crea tu cuenta gratis y toma el control de tu dinero.</p>
+            <ul>
+                <li>Registra ingresos y gastos fácilmente</li>
+                <li>Crea metas de ahorro y retos</li>
+                <li>Aprende a invertir paso a paso</li>
+                <li>Controla tus deudas y pagos</li>
+            </ul>
+        </div>
+        <small>© 2026 Ahorra y Prospera</small>
+    </aside>
+
+    <main class="auth-panel">
+        <div class="auth-caja">
+            <a class="volver" href="../../index.html">← Volver al inicio</a>
+            <h1>Crear cuenta</h1>
+            <p>Solo te tomará un minuto.</p>
+
+            <div class="google-zona" id="google-zona">
+                <div id="google-boton"></div>
+                <div class="separador"><span>o con tu correo</span></div>
+            </div>
+
+            <div class="mensaje" id="mensaje" role="alert"></div>
+
+            <form id="formulario" novalidate>
+                <div class="campo-doble">
+                    <div class="campo">
+                        <label for="nombres">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" autocomplete="given-name" maxlength="80" required>
+                    </div>
+                    <div class="campo">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" autocomplete="family-name" maxlength="80" required>
+                    </div>
+                </div>
+                <div class="campo">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" autocomplete="email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+                <div class="campo">
+                    <label for="id_moneda">Moneda</label>
+                    <select id="id_moneda" name="id_moneda"><option value="1">Peso colombiano (COP)</option></select>
+                </div>
+                <div class="campo">
+                    <label for="contrasena">Contraseña</label>
+                    <div class="contrasena-caja">
+                        <input type="password" id="contrasena" name="contrasena" autocomplete="new-password" required>
+                        <button type="button" class="ver-contrasena" data-ver="contrasena">Ver</button>
+                    </div>
+                    <div class="fuerza" aria-hidden="true"><i id="fuerza"></i></div>
+                    <p class="ayuda">Mínimo 8 caracteres, con letras y números.</p>
+                </div>
+                <div class="campo">
+                    <label for="confirmar">Confirmar contraseña</label>
+                    <input type="password" id="confirmar" name="confirmar" autocomplete="new-password" required>
+                </div>
+                <button class="boton boton-principal boton-grande boton-bloque" type="submit" id="enviar">Crear mi cuenta</button>
+            </form>
+
+            <p class="auth-pie">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+        </div>
+    </main>
+</div>
+<script src="../../assets/js/session.js"></script>
+<script src="../../assets/js/auth.js"></script>
+</body>
+</html>

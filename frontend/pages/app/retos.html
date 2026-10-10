@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retos y logros | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="active" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">GANA CONSTANCIA</p>
+                    <h1>Retos y logros ★</h1>
+                    <p class="muted">Acepta retos, tu progreso avanza solo y gana puntos, insignias y recompensas.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <div class="puntos-caja"><div style="font-size:40px">🏆</div><div><b id="puntos">0</b> <span>puntos</span><br><small id="puntosDetalle"></small></div></div>
+                <div class="pestanas" role="tablist">
+                    <button class="pestana activa" role="tab" data-tab="retos">🎯 Retos</button>
+                    <button class="pestana " role="tab" data-tab="logros">🏅 Logros</button>
+                    <button class="pestana " role="tab" data-tab="recompensas">🎁 Recompensas</button>
+                </div>
+
+                <div class="pagina" data-panel="retos">
+                    <section>
+                        <div class="encabezado-panel"><div><h2>Retos financieros</h2><p class="sub" style="margin:0">Al aceptar un reto, tu progreso se actualiza solo con lo que registras en la app.</p></div></div>
+                        <div class="tres-col" id="retos"></div>
+                    </section>
+                </div>
+
+                <div class="pagina" data-panel="logros" hidden>
+                    <section class="panel"><div class="encabezado-panel"><div><h2>Mis logros</h2><p class="sub" style="margin:0">Insignias que se desbloquean solas cuando cumples cada hábito.</p></div><span class="texto-suave" id="logrosCuenta"></span></div>
+                        <div class="tres-col" id="logros" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"></div></section>
+                </div>
+
+                <div class="pagina" data-panel="recompensas" hidden>
+                    <section class="panel">
+                        <div class="encabezado-panel"><div><h2>Recompensas por tus puntos</h2><p class="sub" style="margin:0">Cuantos más logros y retos alcances, más recompensas puedes reclamar.</p></div></div>
+                        <div class="tres-col" id="recompensas"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/retos.js"></script>
+</body>
+</html>

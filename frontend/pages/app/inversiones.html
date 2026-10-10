@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inversiones | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="active" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">HAZ CRECER TU DINERO</p>
+                    <h1>Inversiones ◈</h1>
+                    <p class="muted">Registra tus inversiones, conoce todos los tipos, cobra tus ganancias y aprende con tu asesor IA.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <div class="kpis" id="kpis"></div>
+                <div class="pestanas" role="tablist">
+                    <button class="pestana activa" role="tab" data-tab="mis">💼 Mis inversiones</button>
+                    <button class="pestana " role="tab" data-tab="tipos">🧭 Tipos de inversión</button>
+                    <button class="pestana " role="tab" data-tab="simulador">📈 Simulador</button>
+                    <button class="pestana " role="tab" data-tab="ganancias">💰 Ganancias</button>
+                    <button class="pestana " role="tab" data-tab="asesor">🤖 Asesor IA</button>
+                </div>
+
+                <div class="pagina" data-panel="mis">
+                    <section class="panel">
+                        <div class="encabezado-panel"><h2>Mis inversiones</h2><button class="boton-ap principal" id="nueva">+ Nueva inversión</button></div>
+                        <div id="lista"></div>
+                    </section>
+                </div>
+
+                <div class="pagina" data-panel="tipos" hidden>
+                    <section class="panel">
+                        <h2>Todos los tipos de inversión</h2>
+                        <p class="sub">Elige un tipo para que te explique qué es, sus ventajas, riesgos y a quién le conviene. Después puedes invertir o aprender más con la IA.</p>
+                        <div class="filtros" id="filtrosRiesgo"></div>
+                        <div class="tipos-botones" id="tiposBotones"></div>
+                    </section>
+                    <section class="panel" id="tipoDetalle"></section>
+                </div>
+
+                <div class="pagina" data-panel="simulador" hidden>
+                    <section class="panel">
+                        <h2>Simulador de inversión</h2>
+                        <p class="sub">Descubre el poder del interés compuesto. Es una simulación educativa, no una promesa de rentabilidad.</p>
+                        <div class="rejilla-form">
+                            <div class="campo-ap"><label for="sTipo">Tipo de inversión</label><select id="sTipo"></select></div>
+                            <div class="campo-ap"><label for="sInicial">Monto inicial</label><input type="number" id="sInicial" min="0" step="10000" value="1000000"></div>
+                            <div class="campo-ap"><label for="sAporte">Aporte mensual</label><input type="number" id="sAporte" min="0" step="10000" value="200000"></div>
+                            <div class="campo-ap"><label for="sTasa">Tasa E.A. (%)</label><input type="number" id="sTasa" min="0" max="100" step="0.1" value="9"></div>
+                            <div class="campo-ap"><label for="sAnios">Años</label><input type="number" id="sAnios" min="1" max="50" value="10"></div>
+                        </div>
+                        <p class="ayuda-ap" id="sNota" style="margin-top:10px"></p>
+                        <div class="kpis" id="simResultado" style="margin-top:16px"></div>
+                        <div id="simTabla" style="margin-top:16px"></div>
+                    </section>
+                </div>
+
+                <div class="pagina" data-panel="ganancias" hidden>
+                    <section class="panel">
+                        <div class="encabezado-panel"><div><h2>Ganancias por mes</h2><p class="sub" style="margin:0">Lo que te pagan tus inversiones. Cada ganancia se suma sola a tus <a href="ingresos-gastos.html#ingresos">Ingresos</a> de ese mes. Para registrarlas usa el botón "💰 Ganancias" de cada inversión.</p></div></div>
+                        <div id="gananciasMes"></div>
+                    </section>
+                </div>
+
+                <div class="pagina" data-panel="asesor" hidden>
+                    <section class="panel chat">
+                        <div class="encabezado-panel"><div><h2>🤖 Asesor financiero con IA</h2><p class="sub" style="margin:0" id="chatModo">Pregúntame lo que quieras aprender sobre finanzas e inversiones.</p></div></div>
+                        <div class="chat-mensajes" id="chatMensajes" aria-live="polite"></div>
+                        <div class="chat-sugerencias" id="chatSugerencias"></div>
+                        <form class="chat-form" id="chatForm" autocomplete="off">
+                            <input id="chatEntrada" maxlength="1000" placeholder="Ej. ¿Qué es un CDT y cuándo me conviene?" aria-label="Tu pregunta">
+                            <button class="boton-ap principal" type="submit" id="chatEnviar">Enviar</button>
+                        </form>
+                        <p class="ayuda-ap" style="margin-top:10px">Respuestas generadas por IA con fines educativos: no son asesoría financiera personalizada ni garantizan resultados. Verifica siempre las entidades y productos en <a href="https://www.superfinanciera.gov.co" target="_blank" rel="noopener">superfinanciera.gov.co</a>.</p>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/tipos-inversion.js"></script>
+    <script src="../../assets/js/inversiones.js"></script>
+    <script src="../../assets/js/chat.js"></script>
+</body>
+</html>

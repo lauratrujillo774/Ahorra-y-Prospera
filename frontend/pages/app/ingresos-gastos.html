@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresos y gastos | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="active" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">CONTROL DE TU DINERO</p>
+                    <h1>Ingresos y gastos ⇅</h1>
+                    <p class="muted">Registra lo que entra y en qué se va tu dinero, todo en un solo lugar.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <div class="pestanas" role="tablist">
+                    <button class="pestana activa" role="tab" data-tab="ingresos">↗ Ingresos</button>
+                    <button class="pestana " role="tab" data-tab="gastos">↘ Gastos</button>
+                </div>
+                <div class="pagina" data-panel="ingresos" data-tipo="ingreso">
+                    <div class="kpis" data-r="kpis"></div>
+                    <div class="dos-col">
+                        <section class="panel">
+                            <div class="encabezado-panel"><h2>Ingresos del mes</h2><input type="month" data-r="mes" class="selector-mes" aria-label="Mes"></div>
+                            <div data-r="lista"></div>
+                        </section>
+                        <section class="panel">
+                            <h2 data-r="tituloForm">Nuevo ingreso</h2>
+                            <form data-r="form" novalidate>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="ingreso-monto">Monto</label><input type="number" id="ingreso-monto" data-r="monto" min="1" step="100" required></div>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="ingreso-desc">Descripción</label><input id="ingreso-desc" data-r="descripcion" maxlength="255" placeholder="Ej. Salario de octubre"></div>
+                                <div class="campo-ap" style="margin-bottom:6px"><label for="ingreso-cat">Categoría</label><select id="ingreso-cat" data-r="categoria"></select></div>
+                                <button type="button" class="agregar-fila" data-r="nuevaCategoria" style="margin:0 0 14px">+ Crear categoría</button>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="ingreso-fecha">Fecha</label><input type="date" id="ingreso-fecha" data-r="fecha" required></div>
+                                <label class="check-ap"><input type="checkbox" data-r="extra"> Es un ingreso fijo que se repite cada mes</label>
+                                <div class="acciones-plan"><button class="boton-ap principal" type="submit" data-r="guardar">Guardar</button><button class="boton-ap suave" type="button" data-r="cancelar" hidden>Cancelar edición</button></div>
+                                <div class="mensaje-ap" data-r="mensaje" role="alert"></div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+                <div class="pagina" data-panel="gastos" data-tipo="gasto" hidden>
+                    <div class="kpis" data-r="kpis"></div>
+                    <div class="dos-col">
+                        <section class="panel">
+                            <div class="encabezado-panel"><h2>Gastos del mes</h2><input type="month" data-r="mes" class="selector-mes" aria-label="Mes"></div>
+                            <div data-r="lista"></div>
+                        </section>
+                        <section class="panel">
+                            <h2 data-r="tituloForm">Nuevo gasto</h2>
+                            <form data-r="form" novalidate>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="gasto-monto">Monto</label><input type="number" id="gasto-monto" data-r="monto" min="1" step="100" required></div>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="gasto-desc">Descripción</label><input id="gasto-desc" data-r="descripcion" maxlength="255" placeholder="Ej. Mercado de la semana"></div>
+                                <div class="campo-ap" style="margin-bottom:6px"><label for="gasto-cat">Categoría</label><select id="gasto-cat" data-r="categoria"></select></div>
+                                <button type="button" class="agregar-fila" data-r="nuevaCategoria" style="margin:0 0 14px">+ Crear categoría</button>
+                                <div class="campo-ap" style="margin-bottom:14px"><label for="gasto-fecha">Fecha</label><input type="date" id="gasto-fecha" data-r="fecha" required></div>
+                                <label class="check-ap"><input type="checkbox" data-r="extra"> Es una necesidad (no un gusto)</label>
+                                <div class="acciones-plan"><button class="boton-ap principal" type="submit" data-r="guardar">Guardar</button><button class="boton-ap suave" type="button" data-r="cancelar" hidden>Cancelar edición</button></div>
+                                <div class="mensaje-ap" data-r="mensaje" role="alert"></div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/movimientos.js"></script>
+</body>
+</html>

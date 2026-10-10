@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="active" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">PANEL PRINCIPAL</p>
+                    <h1>Hola, Samuel <span>👋</span></h1>
+                    <p class="muted">Este es el estado de tus finanzas en tiempo real.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina dash">
+                <div class="acciones-plan">
+                    <a class="boton-ap principal" href="ingresos-gastos.html#ingresos">+ Registrar ingreso</a>
+                    <a class="boton-ap principal" href="ingresos-gastos.html#gastos">+ Registrar gasto</a>
+                    <a class="boton-ap suave" href="plan-financiero.html">❖ Generar mi plan con IA</a>
+                </div>
+                <section class="panel" id="relacion"></section>
+                <div class="stats-fila tres" id="stats"></div>
+
+                <div class="pestanas" role="tablist">
+                    <button class="pestana activa" role="tab" data-tab="resumen">📊 Resumen</button>
+                    <button class="pestana" role="tab" data-tab="actividad">🗓 Actividad</button>
+                    <button class="pestana" role="tab" data-tab="patrimonio">💼 Patrimonio</button>
+                    <button class="pestana" role="tab" data-tab="progreso">🏆 Progreso</button>
+                </div>
+
+                <div class="pagina" data-panel="resumen">
+                    <section class="panel"><div class="encabezado-panel"><div><h2>Ingresos vs. gastos</h2><p class="sub" style="margin:0">Últimos 6 meses</p></div></div><div class="grafica-caja"><canvas id="grafica"></canvas></div></section>
+                    <section class="panel"><div class="encabezado-panel"><div><h2>Gastos por categoría</h2><p class="sub" style="margin:0">Este mes</p></div><a class="texto-suave" href="ingresos-gastos.html#gastos">Ver gastos →</a></div><div id="categorias"></div></section>
+                </div>
+
+                <div class="pagina" data-panel="actividad" hidden>
+                    <div class="dos-col igual">
+                        <section class="panel"><div class="encabezado-panel"><h2>Movimientos recientes</h2><a class="texto-suave" href="ingresos-gastos.html#gastos">Ver todos →</a></div><div id="recientes"></div></section>
+                        <section class="panel"><div class="encabezado-panel"><h2>Presupuesto y próximos pagos</h2><a class="texto-suave" href="presupuesto.html">Ver presupuesto →</a></div><div id="presupuesto"></div><div id="pagos" style="margin-top:14px"></div></section>
+                    </div>
+                </div>
+
+                <div class="pagina" data-panel="patrimonio" hidden>
+                    <div class="stats-fila tres" id="patrimonio"></div>
+                    <section class="panel" id="meta"></section>
+                </div>
+
+                <div class="pagina" data-panel="progreso" hidden>
+                    <section class="panel" id="puntosCard"></section>
+                    <section class="panel" id="asesor"></section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+</body>
+</html>

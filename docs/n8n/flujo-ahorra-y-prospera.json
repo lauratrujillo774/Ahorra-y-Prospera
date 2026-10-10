@@ -1,0 +1,64 @@
+{
+  "name": "Ahorra y Prospera - avisos",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "ahorra-y-prospera", "options": {} },
+      "id": "a1111111-0000-4000-8000-000000000001",
+      "name": "Evento de la app",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "ahorra-y-prospera"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "combinator": "and", "conditions": [ { "leftValue": "={{ $json.body.evento }}", "rightValue": "usuario_registrado", "operator": { "type": "string", "operation": "equals" } } ] }, "renameOutput": true, "outputKey": "Nuevo usuario" },
+            { "conditions": { "options": { "caseSensitive": true, "typeValidation": "strict" }, "combinator": "and", "conditions": [ { "leftValue": "={{ $json.body.evento }}", "rightValue": "alerta", "operator": { "type": "string", "operation": "equals" } } ] }, "renameOutput": true, "outputKey": "Alerta" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1111111-0000-4000-8000-000000000002",
+      "name": "Según el evento",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.datos.usuario.correo }}",
+        "subject": "¡Bienvenido a Ahorra y Prospera!",
+        "message": "=Hola {{ $json.body.datos.usuario.nombres }}, gracias por unirte. Empieza registrando tus ingresos y gastos para ver tu balance."
+      },
+      "id": "a1111111-0000-4000-8000-000000000003",
+      "name": "Correo de bienvenida (Gmail)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [740, 200],
+      "notes": "Conecta tu credencial de Gmail en este nodo."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5000/n8n/notificar",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-api-key", "value": "PON_AQUI_TU_N8N_API_KEY" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ correo: $json.body.datos.usuario.correo, titulo: 'Aviso por n8n', mensaje: $json.body.datos.mensaje }) }}"
+      },
+      "id": "a1111111-0000-4000-8000-000000000004",
+      "name": "Eco a la campanita (opcional)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [740, 400]
+    }
+  ],
+  "connections": {
+    "Evento de la app": { "main": [ [ { "node": "Según el evento", "type": "main", "index": 0 } ] ] },
+    "Según el evento": { "main": [ [ { "node": "Correo de bienvenida (Gmail)", "type": "main", "index": 0 } ], [ { "node": "Eco a la campanita (opcional)", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

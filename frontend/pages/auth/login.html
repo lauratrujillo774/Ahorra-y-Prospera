@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/site.css">
+</head>
+<body>
+<div class="auth">
+    <aside class="auth-lado">
+        <a class="logo" href="../../index.html"><img class="logo-marca" src="../../assets/img/logo-icon.svg" alt="" width="40" height="40"><span>Ahorra<small>y Prospera</small></span></a>
+        <div>
+            <h2>Qué bueno verte de nuevo</h2>
+            <p>Tu progreso te está esperando.</p>
+            <ul>
+                <li>Tus gastos e ingresos al día</li>
+                <li>Tus metas de ahorro avanzando</li>
+                <li>Recomendaciones pensadas para ti</li>
+            </ul>
+        </div>
+        <small>© 2026 Ahorra y Prospera</small>
+    </aside>
+
+    <main class="auth-panel">
+        <div class="auth-caja">
+            <a class="volver" href="../../index.html">← Volver al inicio</a>
+            <h1>Iniciar sesión</h1>
+            <p>Ingresa con tu correo y contraseña.</p>
+
+            <div class="google-zona" id="google-zona">
+                <div id="google-boton"></div>
+                <div class="separador"><span>o con tu correo</span></div>
+            </div>
+
+            <div class="mensaje" id="mensaje" role="alert"></div>
+
+            <form id="formulario" novalidate>
+                <div class="campo">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" autocomplete="email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+                <div class="campo">
+                    <label for="contrasena">Contraseña</label>
+                    <div class="contrasena-caja">
+                        <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" placeholder="Tu contraseña" required>
+                        <button type="button" class="ver-contrasena" data-ver="contrasena">Ver</button>
+                    </div>
+                </div>
+                <button class="boton boton-principal boton-grande boton-bloque" type="submit" id="enviar">Entrar</button>
+            </form>
+
+            <p class="auth-pie">¿Aún no tienes cuenta? <a href="registro.html">Regístrate gratis</a></p>
+        </div>
+    </main>
+</div>
+<script src="../../assets/js/session.js"></script>
+<script src="../../assets/js/auth.js"></script>
+</body>
+</html>

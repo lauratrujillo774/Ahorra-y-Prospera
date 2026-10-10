@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deudas y pagos | Ahorra y Prospera</title>
+    <link rel="icon" type="image/svg+xml" href="../../assets/img/logo-icon.svg">
+    <link rel="stylesheet" href="../../assets/css/app.css">
+    <link rel="stylesheet" href="../../assets/css/plan.css">
+
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <img class="brand-mark" src="../../assets/img/logo-icon.svg" alt="" width="42" height="42">
+                <div>
+                    <b>Ahorra</b>
+                    <span>y Prospera</span>
+                </div>
+            </div>
+            <nav>
+                <a class="" href="dashboard.html">▦ <span>Gestión Financiera</span></a>
+                <a class="" href="presupuesto.html">▤ <span>Presupuesto</span></a>
+                <a class="" href="ingresos-gastos.html">⇅ <span>Ingresos y Gastos</span></a>
+                <a class="" href="ahorros.html">◎ <span>Ahorros</span></a>
+                <a class="" href="inversiones.html">◈ <span>Inversiones</span></a>
+                <a class="active" href="deudas.html">▣ <span>Deudas y Pagos</span></a>
+                <a class="" href="retos.html">★ <span>Retos y Logros</span></a>
+                <a class="" href="educacion.html">✎ <span>Educación Financiera</span></a>
+                <a class="" href="ia-financiera.html">✦ <span>IA Financiera</span></a>
+                <a class="" href="plan-financiero.html">❖ <span>Plan Financiero IA</span></a>
+                <a class="" href="reportes.html">⇩ <span>Reportes</span></a>
+                <a class="" href="configuracion.html">⚙ <span>Configuración</span></a>
+            </nav>
+            <div class="side-tip">
+                <strong>Consejo inteligente</strong>
+                <p>La constancia es una de las mejores herramientas para cuidar tus finanzas.</p>
+            </div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">CONTROL DE DEUDAS</p>
+                    <h1>Deudas y pagos ▣</h1>
+                    <p class="muted">Registra lo que debes, programa tus pagos y quédate libre de deudas.</p>
+                </div>
+                <div class="actions">
+                    <button id="campana" class="icon-btn con-punto" title="Notificaciones" aria-label="Notificaciones">🔔<span class="punto" hidden>0</span></button>
+                    <button id="themeBtn" class="icon-btn" title="Cambiar tema">☾</button>
+                    <button class="profile" data-iniciales>US</button>
+                </div>
+            </header>
+            <div class="pagina">
+                <div class="pestanas" role="tablist">
+                    <button class="pestana activa" role="tab" data-tab="deudas">💳 Registrar deuda</button>
+                    <button class="pestana " role="tab" data-tab="pagos">⏰ Pagos programados</button>
+                </div>
+                <div class="pagina" data-panel="deudas">
+                    <section class="panel">
+                        <h2>Registrar una deuda</h2>
+                        <p class="sub">Tarjetas, créditos, préstamos a personas… Anótalos aquí para seguir tu avance; tu plan financiero los tendrá en cuenta.</p>
+                        <form id="form-deuda" novalidate>
+                            <div class="rejilla-form">
+                                <div class="campo-ap"><label for="acreedor">¿A quién le debes?</label><input id="acreedor" maxlength="100" placeholder="Banco, tarjeta, persona…" required></div>
+                                <div class="campo-ap"><label for="monto_total">Valor de la deuda</label><input type="number" id="monto_total" min="1" step="1000" required></div>
+                                <div class="campo-ap"><label for="tasa">Tasa de interés anual (%)</label><input type="number" id="tasa" min="0" max="999" step="0.1" placeholder="Ej. 28"></div>
+                                <div class="campo-ap"><label for="cuota">Cuota mensual</label><input type="number" id="cuota" min="0" step="1000"></div>
+                                <div class="campo-ap"><label for="vencimiento">Fecha final de pago</label><input type="date" id="vencimiento" required></div>
+                                <div class="campo-ap"><label for="descripcion">Nota (opcional)</label><input id="descripcion" maxlength="255"></div>
+                            </div>
+                            <div class="acciones-plan" style="margin-top:18px"><button class="boton-ap principal" type="submit">+ Guardar deuda</button></div>
+                            <div class="mensaje-ap" id="mensaje" role="alert"></div>
+                        </form>
+                    </section>
+                    <section>
+                        <div class="kpis" id="resumen-deudas" style="margin-bottom:18px"></div>
+                        <div class="listado-deudas" id="listado"></div>
+                    </section>
+                </div>
+                <div class="pagina" data-panel="pagos" hidden>
+                    <section class="panel" id="pagosProg">
+                        <div class="encabezado-panel"><div><h2>Pagos programados</h2><p class="sub" style="margin:0">Cuotas, facturas y suscripciones. Te avisamos en la campanita y por correo cuando falten 2 días o menos, y al marcarlos como pagados pasan a tus Gastos.</p></div><button class="boton-ap principal" id="nuevoPago">+ Programar pago</button></div>
+                        <div id="listaPagos"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../assets/js/session.js"></script>
+    <script src="../../assets/js/ui.js"></script>
+    <script src="../../assets/js/shell.js"></script>
+    <script src="../../assets/js/deudas.js"></script>
+    <script src="../../assets/js/pagos.js"></script>
+</body>
+</html>

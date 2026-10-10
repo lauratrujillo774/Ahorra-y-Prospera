@@ -1,0 +1,99 @@
+{
+  "name": "Ahorra y Prospera - resumen semanal y recordatorios de pago",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [ { "field": "weeks", "weeksInterval": 1, "triggerAtDay": [1], "triggerAtHour": 8 } ] } },
+      "id": "c3333333-0000-4000-8000-000000000001",
+      "name": "Cada lunes 8:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/n8n/resumen-semanal?dias=7",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-api-key", "value": "PON_AQUI_TU_N8N_API_KEY" } ] }
+      },
+      "id": "c3333333-0000-4000-8000-000000000002",
+      "name": "Resumen de la semana",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 200]
+    },
+    {
+      "parameters": { "fieldToSplitOut": "usuarios", "options": {} },
+      "id": "c3333333-0000-4000-8000-000000000003",
+      "name": "Uno por usuario",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.correo }}",
+        "subject": "Tu semana en Ahorra y Prospera",
+        "message": "=Hola {{ $json.nombres }}, esta semana ingresaron {{ $json.ingresos }} {{ $json.moneda }} y gastaste {{ $json.gastos }} {{ $json.moneda }}: balance {{ $json.balance }}. {{ $json.balance < 0 ? 'Cuida tus gastos la próxima semana.' : '¡Buen trabajo, sigue así!' }}"
+      },
+      "id": "c3333333-0000-4000-8000-000000000004",
+      "name": "Correo semanal (Gmail)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [880, 200]
+    },
+    {
+      "parameters": { "rule": { "interval": [ { "field": "days", "daysInterval": 1, "triggerAtHour": 9 } ] } },
+      "id": "c3333333-0000-4000-8000-000000000005",
+      "name": "Cada día 9:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [220, 440]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5000/n8n/pagos-proximos?dias=2",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-api-key", "value": "PON_AQUI_TU_N8N_API_KEY" } ] }
+      },
+      "id": "c3333333-0000-4000-8000-000000000006",
+      "name": "Pagos que vencen pronto",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 440]
+    },
+    {
+      "parameters": { "fieldToSplitOut": "pagos", "options": {} },
+      "id": "c3333333-0000-4000-8000-000000000007",
+      "name": "Uno por pago",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [660, 440]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5000/n8n/notificar",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "x-api-key", "value": "PON_AQUI_TU_N8N_API_KEY" } ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ correo: $json.correo, titulo: 'Recordatorio: ' + $json.concepto, mensaje: 'Tu pago de ' + $json.monto + ' ' + $json.moneda + ' vence el ' + $json.fecha + '.' }) }}"
+      },
+      "id": "c3333333-0000-4000-8000-000000000008",
+      "name": "Recordar en la campanita",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 440],
+      "notes": "Cambia este nodo por WhatsApp, Telegram o SMS si prefieres otro canal."
+    }
+  ],
+  "connections": {
+    "Cada lunes 8:00": { "main": [ [ { "node": "Resumen de la semana", "type": "main", "index": 0 } ] ] },
+    "Resumen de la semana": { "main": [ [ { "node": "Uno por usuario", "type": "main", "index": 0 } ] ] },
+    "Uno por usuario": { "main": [ [ { "node": "Correo semanal (Gmail)", "type": "main", "index": 0 } ] ] },
+    "Cada día 9:00": { "main": [ [ { "node": "Pagos que vencen pronto", "type": "main", "index": 0 } ] ] },
+    "Pagos que vencen pronto": { "main": [ [ { "node": "Uno por pago", "type": "main", "index": 0 } ] ] },
+    "Uno por pago": { "main": [ [ { "node": "Recordar en la campanita", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

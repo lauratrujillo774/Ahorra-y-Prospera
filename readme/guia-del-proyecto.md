@@ -307,6 +307,8 @@ git push
 2. Cuando esté en estado *Running*, copia de la pestaña *Overview*: **Host**, **Port**, **User** (normalmente `avnadmin`), **Password** y **Database name** (normalmente `defaultdb`).
 3. Aiven exige conexión segura (SSL); la app ya lo soporta con `MYSQL_SSL=true`.
 
+> **Novedad:** ya no es obligatorio hacer este paso. Si la app arranca y encuentra la base **vacía** (no existe la tabla `usuarios`), **crea sola todas las tablas** (`backend/src/servicios/esquema.js`, llamado desde `app.js`) y lo anuncia en los Logs ("La base de datos está vacía: creando las tablas automáticamente…"). Hacerlo a mano con PowerShell sigue sirviendo como alternativa.
+
 ### 9.4 Paso 3 — Crear las tablas en esa base
 En PowerShell, dentro de la carpeta `backend` del proyecto (cambia los valores por los de Aiven):
 ```

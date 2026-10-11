@@ -279,7 +279,7 @@ Cada consulta con IA se anota en la tabla `consultas_ia`. Cada usuario tiene **2
 
 **Resumen:** el backend de Node sirve también las páginas, así que se despliega **una sola aplicación** (en Render) y una **base de datos MySQL** aparte (en Aiven). Quedan en una sola dirección, por ejemplo `https://ahorra-y-prospera.onrender.com`.
 
-> Yo no puedo crear las cuentas ni iniciar sesión por ti en Render, Aiven ni Google, así que **no pude hacer el despliegue final**. Dejé el código listo y probado en modo producción con una base de datos vacía; los pasos de abajo son los que tienes que hacer tú.
+> Las cuentas de Render, Aiven y Google las creó la dueña del proyecto (el código no puede hacerlo por ella). **Estado actual:** la app está publicada en https://ahorra-y-prospera.onrender.com y `/salud` responde `{"servidor":"ok","baseDeDatos":"ok"}`; las tablas se crearon solas en Aiven al primer arranque. Lo que sigue son los pasos que se siguieron, con los problemas reales que aparecieron (sección 9.12).
 
 ### 9.1 Qué se preparó en el código
 | Archivo | Para qué |
@@ -309,7 +309,9 @@ git push
 
 > **Novedad:** ya no es obligatorio hacer este paso. Si la app arranca y encuentra la base **vacía** (no existe la tabla `usuarios`), **crea sola todas las tablas** (`backend/src/servicios/esquema.js`, llamado desde `app.js`) y lo anuncia en los Logs ("La base de datos está vacía: creando las tablas automáticamente…"). Hacerlo a mano con PowerShell sigue sirviendo como alternativa.
 
-### 9.4 Paso 3 — Crear las tablas en esa base
+### 9.4 Paso 3 — Crear las tablas en esa base (opcional)
+**No es necesario:** la app crea las tablas sola al arrancar si la base está vacía (así ocurrió en Render). Este paso manual solo sirve si quieres crearlas antes de publicar o si el arranque automático falla.
+
 En PowerShell, dentro de la carpeta `backend` del proyecto (cambia los valores por los de Aiven):
 ```
 $env:MYSQL_HOST="tu-host.aivencloud.com"
@@ -330,7 +332,7 @@ Debe terminar con "Importación completa sin errores. Ahora hay 30 tablas y 4 tr
 
 | Variable | Valor |
 |---|---|
-| `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` | Los de Aiven (paso 2) |
+| `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` | Los de Aiven (paso 2). **`MYSQL_DATABASE` debe ser el nombre de la base de Aiven (normalmente `defaultdb`), no `ahorra_y_prospera`** (ese es el de tu XAMPP local; si lo pones, falla con `Unknown database`). |
 | `MYSQL_SSL` | `true` |
 | `APP_URL` | La dirección que te dé Render, p. ej. `https://ahorra-y-prospera.onrender.com` (si aún no la sabes, déjala y edítala después del primer despliegue) |
 | `GOOGLE_CLIENT_ID` | El mismo que usas en local |
@@ -342,7 +344,17 @@ Debe terminar con "Importación completa sin errores. Ahora hay 30 tablas y 4 tr
 5. Comprueba `https://TU-DIRECCION/salud`: debe responder `{"servidor":"ok","baseDeDatos":"ok"}`.
 
 ### 9.6 Paso 5 — Que funcione el acceso con Google
-En https://console.cloud.google.com/apis/credentials abre tu ID de cliente de OAuth y en **Orígenes autorizados de JavaScript** agrega la dirección de Render (`https://TU-DIRECCION`, sin barra al final). Guarda y espera unos minutos.
+En https://console.cloud.google.com/apis/credentials abre tu ID de cliente de OAuth y en **Orígenes autorizados de JavaScript** agrega la dirección de Render (`https://ahorra-y-prospera.onrender.com`, sin barra al final). Guarda y espera unos minutos. Además, en Render → Environment pon `APP_URL` con esa misma dirección.
+
+**Si Google dice "Necesitas acceso adicional a proyecto: … (resourcemanager.projects.get)":** estás con una cuenta de Google que no tiene acceso al proyecto que contiene el ID de cliente. Opciones:
+1. **Cambiar de cuenta** (foto de perfil arriba a la derecha → otra cuenta) y reabrir el enlace; sirve la cuenta que creó el proyecto.
+2. **Crear un proyecto nuevo** con la cuenta que quieras usar:
+   1. Selector de proyectos → *Proyecto nuevo* → nombre `ahorra-y-prospera`.
+   2. *APIs y servicios → Pantalla de consentimiento de OAuth* → tipo **Externo**, nombre de la app y tu correo. Agrega *usuarios de prueba* (o pulsa *Publicar aplicación* para que entre cualquiera).
+   3. *Credenciales → Crear credenciales → ID de cliente de OAuth* → **Aplicación web**.
+   4. Orígenes autorizados de JavaScript: `http://localhost:5000`, `http://localhost:5501`, `http://127.0.0.1:5501` y `https://ahorra-y-prospera.onrender.com`.
+   5. Copia el ID de cliente (termina en `.apps.googleusercontent.com`) y ponlo en `GOOGLE_CLIENT_ID` en `backend/.env` (luego reinicia con `rs`) y en Render → Environment.
+   Quienes ya entraron con Google no pierden su cuenta: se reconoce por el correo.
 
 ### 9.7 Paso 6 — Probar
 Regístrate, crea un gasto, abre Presupuesto y prueba el chat con la IA y el botón de Google. Si algo falla, mira **Logs** en el panel de Render.
@@ -398,7 +410,9 @@ El archivo `backend/.env` contiene tus **secretos** (contraseña de la base, cla
    - **Database name**: normalmente `defaultdb`
 6. Revisa que el acceso no esté restringido por direcciones IP (por defecto permite todas). Si no, la app en Render no podrá conectar.
 
-#### Paso 2 — Crear las tablas en esa base (≈2 minutos)
+#### Paso 2 — Crear las tablas en esa base (opcional)
+> **Ya no es obligatorio:** al arrancar, la app detecta que la base está vacía y crea las tablas sola. Puedes saltarte este paso; si prefieres hacerlo a mano, sigue leyendo.
+
 La base de Aiven nace **vacía**: no tiene tus tablas. El archivo `backend/database/esquema.sql` las describe todas, y el comando `npm run importar-bd` las crea. Lo haces **desde tu computador**, apuntando a Aiven:
 
 1. Abre PowerShell y entra a la carpeta del proyecto: `cd "C:\Users\Asus\Downloads\ahorra y prospera.. version oficial\ahorra y prospera.. version oficial\backend"`
@@ -447,7 +461,10 @@ Google solo acepta el inicio de sesión desde las direcciones que tú autorices.
 | Render: *Build failed* | Falló la instalación | Mira **Logs**; verifica que el repositorio tenga la carpeta `backend` y su `package.json` |
 | Render: se queda en *Deploying* o dice *Failed* al arrancar | La app se cae al iniciar | Casi siempre es una variable de la base mal escrita; los **Logs** muestran "No se pudo conectar a MySQL: …" |
 | `/salud` dice `baseDeDatos: error` | La app no llega a Aiven | Revisa las cinco variables `MYSQL_*` y que `MYSQL_SSL` sea `true` |
-| La página carga pero registrarse da error | Faltan las tablas | Repite el Paso 2 apuntando a Aiven |
+| Logs: `Unknown database 'ahorra_y_prospera'` | `MYSQL_DATABASE` apunta al nombre local | Ponla igual al nombre de la base de Aiven (`defaultdb`) |
+| Logs: `Failed to open the referenced table 'usuarios'` | La base estaba vacía y la versión antigua no creaba tablas | Usa la versión actual (crea las tablas sola) o ejecuta el Paso 2 |
+| La página carga pero registrarse da error | Faltan las tablas | Mira los Logs; si no se crearon, repite el Paso 2 apuntando a Aiven |
+| Google: "Necesitas acceso adicional a proyecto" | Cuenta de Google sin acceso al proyecto del ID de cliente | Ver sección 9.6 (cambiar de cuenta o crear un proyecto nuevo) |
 | Google dice `origin_mismatch` | La dirección no está autorizada | Repite el Paso 5 |
 | No llegan correos | Render puede bloquear SMTP en el plan gratuito, o la contraseña de aplicación es incorrecta | Mira los Logs (`[correo] No se pudo enviar…`); la alternativa es un servicio de correo por API |
 
@@ -456,3 +473,11 @@ Con los planes gratuitos de Render y Aiven, **nada**, pero con las limitaciones 
 
 #### Si solo necesitas mostrarla (sin publicar)
 Para una exposición o una revisión, no es obligatorio desplegar: puedes dejarla corriendo en tu computador (`npm run dev` + XAMPP) y abrirla con `http://localhost:5000`. Desplegar solo hace falta si otras personas deben entrar desde sus propios dispositivos cuando tu computador esté apagado.
+
+
+### 9.12 Qué pasó en el despliegue real (registro)
+1. Se subió el código a GitHub (rama `main`, con `.gitignore` para no subir `.env` ni `node_modules`).
+2. Render falló con `Unknown database 'ahorra_y_prospera'`: `MYSQL_DATABASE` tenía el nombre local. Se corrigió con el nombre de la base de Aiven (`defaultdb`).
+3. Luego falló con `Failed to open the referenced table 'usuarios'`: la base de Aiven estaba vacía. Se añadió la creación automática de tablas al arrancar (`backend/src/servicios/esquema.js`, llamado desde `app.js`).
+4. Tras redesplegar, `https://ahorra-y-prospera.onrender.com/salud` respondió `{"servidor":"ok","baseDeDatos":"ok"}`.
+5. Pendiente de la dueña: autorizar la dirección de Render en Google (sección 9.6) y poner `APP_URL` en Render.

@@ -32,15 +32,19 @@ for (const proveedor of proveedores) {
 }
 
 console.log('\n── Correo para alertas (SMTP) ──');
-const faltan = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASS'].filter((k) => !process.env[k]);
-if (faltan.length) {
-    mal(`Faltan en backend/.env: ${faltan.join(', ')}`);
+if (!correoConfigurado()) {
+    mal('Falta configurar el correo en backend/.env: APPS_SCRIPT_URL y APPS_SCRIPT_CLAVE (recomendado, gratis; ver backend/scripts/enviar-correo.gs), o BREVO_API_KEY y BREVO_FROM, o SMTP_HOST, SMTP_USER y SMTP_PASS.');
     info('Sin esto las alertas llegan solo a la campanita.');
-} else if (!correoConfigurado()) {
-    mal('La configuración de correo está incompleta.');
 } else {
-    const destino = process.argv[2] || process.env.SMTP_USER;
-    ok(`Datos de correo presentes (${process.env.SMTP_HOST}:${process.env.SMTP_PORT || 587}, usuario ${process.env.SMTP_USER}).`);
+    const conAppsScript = Boolean(process.env.APPS_SCRIPT_URL && process.env.APPS_SCRIPT_CLAVE);
+    const conBrevo = !conAppsScript && Boolean(process.env.BREVO_API_KEY && process.env.BREVO_FROM);
+    const destino = process.argv[2] || (conAppsScript || conBrevo ? '' : process.env.SMTP_USER);
+    if (!destino) {
+        mal('Indica a qué correo enviar la prueba: npm run probar-config alguien@dominio.com');
+        console.log('');
+        process.exit(0);
+    }
+    ok(conAppsScript ? 'Google Apps Script configurado (Gmail por HTTPS).' : conBrevo ? `Brevo configurado (remitente ${process.env.BREVO_FROM}).` : `Datos de correo presentes (${process.env.SMTP_HOST}:${process.env.SMTP_PORT || 587}, usuario ${process.env.SMTP_USER}).`);
     info(`Enviando un correo de prueba a ${destino}…`);
     const salio = await enviarCorreo({
         para: destino,
@@ -51,6 +55,7 @@ if (faltan.length) {
     if (salio) ok('Correo enviado. Revisa tu bandeja de entrada (y la carpeta de spam).');
     else {
         mal('No se pudo enviar. Revisa el mensaje de error que aparece arriba.');
+        info('Con Brevo: la clave API debe ser válida y BREVO_FROM debe ser un remitente verificado en tu cuenta de Brevo.');
         info('Con Gmail: usa una "contraseña de aplicación" (16 letras, sin espacios), no tu contraseña normal; SMTP_HOST = smtp.gmail.com y SMTP_PORT = 587.');
     }
 }

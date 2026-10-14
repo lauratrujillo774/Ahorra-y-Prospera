@@ -135,9 +135,11 @@ Navegador (frontend)  ──fetch──►  Express (backend)  ──SQL──�
 
 ## 3. Cómo se implementó el envío de correos
 
-**Tecnología:** librería **Nodemailer** con **SMTP** (en esta instalación, Gmail). Todo está en `backend/src/servicios/correo.js`.
+**Tecnología:** un **Google Apps Script** propio (`backend/scripts/enviar-correo.gs`) que envía con tu Gmail y recibe la orden por HTTPS (recomendado: gratis, funciona en Render y envía a cualquier dirección, incluidos dominios institucionales). De respaldo, la **API de Brevo** o la librería **Nodemailer** con **SMTP**. Todo está en `backend/src/servicios/correo.js`. Orden de uso: Apps Script (`APPS_SCRIPT_URL` y `APPS_SCRIPT_CLAVE`) → Brevo → SMTP.
 
-**Configuración (`backend/.env`):** `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` y `APP_URL`. Con Gmail se usa una **contraseña de aplicación** (no la contraseña normal de la cuenta). Si faltan los datos, la app **no falla**: simplemente no envía correos y las alertas llegan igual a la campanita.
+**Configuración Brevo (`backend/.env`):** `BREVO_API_KEY` (clave de *SMTP y API → Claves API*) y `BREVO_FROM` (remitente verificado en Brevo, p. ej. `Ahorra y Prospera <tucorreo@gmail.com>`).
+
+**Configuración SMTP (`backend/.env`):** `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` y `APP_URL`. Con Gmail se usa una **contraseña de aplicación** (no la contraseña normal de la cuenta). Si faltan los datos, la app **no falla**: simplemente no envía correos y las alertas llegan igual a la campanita.
 
 **Piezas de `correo.js`:**
 1. `correoConfigurado()` — comprueba que existan host, usuario y contraseña.
@@ -362,7 +364,7 @@ Regístrate, crea un gasto, abre Presupuesto y prueba el chat con la IA y el bot
 ### 9.8 Límites del plan gratuito (importante)
 - **Se duerme:** Render suspende la app tras unos 15 minutos sin visitas; la primera visita después tarda cerca de un minuto. Mientras duerme **no corre la revisión horaria de alertas** (campanita y correos). Para alertas confiables hace falta un plan de pago o un servicio externo que la "despierte" (por ejemplo, n8n llamando a `/salud` cada 10 minutos).
 - **Fotos de perfil:** el disco gratuito de Render es temporal; las fotos subidas se pierden al redesplegar o reiniciar. Para que duren hace falta un disco persistente (de pago) o guardarlas en la base de datos o en un servicio de archivos (puedo implementarlo).
-- **Correos:** Render puede bloquear la salida SMTP en el plan gratuito, y entonces las alertas llegarían solo a la campanita. La solución es usar un servicio de envío por API (Brevo, Resend…) o un plan de pago; hoy el código usa solo SMTP.
+- **Correos:** Render puede bloquear la salida SMTP en el plan gratuito, y entonces las alertas llegarían solo a la campanita. La solución es el Google Apps Script (gratis): pon `APPS_SCRIPT_URL` y `APPS_SCRIPT_CLAVE` en el panel *Environment* de Render y el código lo usa en lugar de SMTP.
 - **Aiven gratuito:** revisa sus límites vigentes (almacenamiento y posible apagado por inactividad).
 - Los límites y precios de Render y Aiven cambian; confírmalos en sus páginas antes de depender de ellos.
 
@@ -466,7 +468,7 @@ Google solo acepta el inicio de sesión desde las direcciones que tú autorices.
 | La página carga pero registrarse da error | Faltan las tablas | Mira los Logs; si no se crearon, repite el Paso 2 apuntando a Aiven |
 | Google: "Necesitas acceso adicional a proyecto" | Cuenta de Google sin acceso al proyecto del ID de cliente | Ver sección 9.6 (cambiar de cuenta o crear un proyecto nuevo) |
 | Google dice `origin_mismatch` | La dirección no está autorizada | Repite el Paso 5 |
-| No llegan correos | Render puede bloquear SMTP en el plan gratuito, o la contraseña de aplicación es incorrecta | Mira los Logs (`[correo] No se pudo enviar…`); la alternativa es un servicio de correo por API |
+| No llegan correos | Render puede bloquear SMTP en el plan gratuito, o la contraseña de aplicación es incorrecta | Mira los Logs (`[correo] No se pudo enviar…`); la solución es el Google Apps Script (`APPS_SCRIPT_URL` y `APPS_SCRIPT_CLAVE`) |
 
 #### Cuánto cuesta
 Con los planes gratuitos de Render y Aiven, **nada**, pero con las limitaciones de la sección 9.8 (la app se duerme, las fotos no persisten, el correo puede fallar, límites de almacenamiento). Los planes y precios cambian: confírmalos en sus páginas, y verifica si piden una tarjeta para verificar la cuenta.

@@ -69,7 +69,21 @@ Todas las tablas tienen su ruta en `backend/src/routes/` y su pantalla en `front
 | Configuración | `/perfil`, `/auth` | `usuarios`, `sesiones`, `monedas`, `roles` |
 
 ## Alertas por correo
-Las alertas de presupuesto e ingresos llegan siempre a la campanita 🔔; para recibirlas también por correo configura SMTP en `backend/.env`:
+Las alertas de presupuesto e ingresos llegan siempre a la campanita 🔔; para recibirlas también por correo (a cualquier dirección: Gmail, Yahoo, Hotmail, dominios institucionales como `@iesantaelena.edu.co` o `@elpoli.edu.co`) configura el envío en `backend/.env`.
+
+**Opción recomendada (gratis, funciona también en Render): Google Apps Script con tu Gmail.**
+1. Entra a script.google.com → *Nuevo proyecto* y pega el contenido de `backend/scripts/enviar-correo.gs`.
+2. Cambia `CLAVE` por una frase larga y secreta.
+3. *Implementar → Nueva implementación → Aplicación web* → Ejecutar como: **Yo** → Acceso: **Cualquier persona** → Implementar (acepta los permisos de Gmail).
+4. Copia la URL que termina en `/exec` y ponla en `backend/.env` (y en Render):
+```
+APPS_SCRIPT_URL = https://script.google.com/macros/s/XXXX/exec
+APPS_SCRIPT_CLAVE = <la misma clave del script>
+APP_URL = http://localhost:5000
+```
+Prueba con `npm run probar-config alguien@iesantaelena.edu.co`. Gmail permite unos 100 correos al día con cuenta gratuita en Apps Script (1500 con Workspace).
+
+**Otras alternativas** (se usan solo si no hay `APPS_SCRIPT_URL`): Brevo por API (`BREVO_API_KEY` y `BREVO_FROM`, revisa su plan gratuito) o SMTP:
 ```
 SMTP_HOST = smtp.gmail.com
 SMTP_PORT = 587

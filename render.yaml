@@ -30,6 +30,14 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: APPS_SCRIPT_URL
+        sync: false
+      - key: APPS_SCRIPT_CLAVE
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_FROM
+        sync: false
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT

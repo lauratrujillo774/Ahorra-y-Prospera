@@ -175,6 +175,12 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
         );
         let ingreso = mesActual.total;
         let fuente = 'mes';
+        // Sin ingresos registrados, la persona puede indicar cuánto dinero tiene disponible (?ingreso=...)
+        const indicado = numero(req.query.ingreso);
+        if (!(ingreso > 0) && indicado > 0) {
+            ingreso = indicado;
+            fuente = 'indicado';
+        }
         if (!(ingreso > 0)) {
             const [[prom]] = await connection.query(
                 `SELECT COALESCE(SUM(monto), 0) / 3 AS total FROM ingresos WHERE id_usuario = ?
@@ -185,7 +191,7 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
             fuente = 'promedio';
         }
         if (!(ingreso > 0)) {
-            return res.json({ hayIngresos: false, message: 'Aún no tienes ingresos registrados. Regístralos en Ingresos o llena el presupuesto manualmente.' });
+            return res.json({ hayIngresos: false, message: 'Aún no tienes ingresos registrados.' });
         }
 
         const [[usuario]] = await connection.query('SELECT porcentaje_ahorro_meta FROM usuarios WHERE id_usuario = ?', [id]);
@@ -220,7 +226,7 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
         }
         res.json({
             hayIngresos: true, ingresoBase: ingreso, fuenteIngreso: fuente, ahorroPct, monto_total: total, limites,
-            explicacion: `Con ingresos de ${Math.round(ingreso).toLocaleString('es-CO')}${fuente === 'promedio' ? ' (promedio de tus últimos 3 meses)' : ' este mes'}, separé el ${ahorroPct}% para ahorrar y repartí el resto entre tus categorías según una distribución sana${totalHist ? ' ajustada a lo que realmente gastas' : ''}.`,
+            explicacion: `Con ${fuente === 'indicado' ? 'el dinero disponible que indicaste' : 'ingresos'} de ${Math.round(ingreso).toLocaleString('es-CO')}${fuente === 'promedio' ? ' (promedio de tus últimos 3 meses)' : fuente === 'mes' ? ' este mes' : ''}, separé el ${ahorroPct}% para ahorrar y repartí el resto entre tus categorías según una distribución sana${totalHist ? ' ajustada a lo que realmente gastas' : ''}.`,
         });
     } catch (error) {
         errorServidor(res, 'Sugiriendo presupuesto con IA', error, 'No se pudo calcular la sugerencia');

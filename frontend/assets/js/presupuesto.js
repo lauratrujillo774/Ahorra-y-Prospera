@@ -90,7 +90,7 @@
       actual = await api(`/presupuestos/${a}/${m}`);
       $('#origen').textContent = actual.heredadoDe
         ? `Copiamos automáticamente tu presupuesto de ${nombreMes(actual.heredadoDe.anio, actual.heredadoDe.mes)}. Ajústalo o genera uno nuevo con IA.`
-        : actual.existe ? `Presupuesto de ${nombreMes(a, m)}${actual.generado_automaticamente ? ' · generado con IA' : ''}. Cada mes se guarda aparte.` : 'Llénalo tú o pídele una sugerencia a la IA según tus ingresos.';
+        : actual.existe ? `Presupuesto de ${nombreMes(a, m)}${actual.generado_automaticamente ? ' · generado con IA' : ''}. Cada mes se guarda aparte.` : 'Llénalo tú o pídele una sugerencia a la IA (con o sin ingresos registrados).';
       estado(actual);
       formulario(actual);
       mostrarEditor(true);
@@ -148,8 +148,15 @@
     boton.disabled = true;
     boton.textContent = '✦ Analizando tus ingresos…';
     try {
-      const s = await api(`/presupuestos/${a}/${m}/sugerido-ia`);
-      if (!s.hayIngresos) { aviso(s.message, 'error'); return; }
+      let s = await api(`/presupuestos/${a}/${m}/sugerido-ia`);
+      if (!s.hayIngresos) {
+        // Sin ingresos registrados se puede crear igual: la persona indica cuánto dinero tiene disponible
+        const v = await modal({ titulo: 'Presupuesto sin ingresos registrados', descripcion: 'Aún no tienes ingresos en la app. Dinos cuánto dinero tienes disponible para este mes y armamos el presupuesto con ese valor.',
+          campos: [{ k: 'ingreso', label: 'Dinero disponible este mes', tipo: 'number', min: 1, step: 1000, req: true, placeholder: 'Ej. 1500000' }], textoOk: 'Generar presupuesto' });
+        const indicado = Number(v?.ingreso);
+        if (!(indicado > 0)) return;
+        s = await api(`/presupuestos/${a}/${m}/sugerido-ia?ingreso=${indicado}`);
+      }
       formulario(actual, s);
       mostrarEditor(true);
       ofrecerSugerencia(s.explicacion + ' Puedes ajustarlo abajo antes de usarlo; al usarlo te enviamos el resumen a tu correo.');

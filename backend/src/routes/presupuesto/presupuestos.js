@@ -173,6 +173,8 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
         const [[mesActual]] = await connection.query(
             'SELECT COALESCE(SUM(monto), 0) AS total FROM ingresos WHERE id_usuario = ? AND YEAR(fecha) = ? AND MONTH(fecha) = ?', [id, p.anio, p.mes]
         );
+        // Si la persona pide un valor concreto (?total=...), el presupuesto suma exactamente ese valor
+        const pedido = numero(req.query.total) > 0 ? Math.round(numero(req.query.total)) : 0;
         let ingreso = mesActual.total;
         let fuente = 'mes';
         // Sin ingresos registrados, la persona puede indicar cuánto dinero tiene disponible (?ingreso=...)
@@ -190,13 +192,14 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
             ingreso = Math.round(prom.total);
             fuente = 'promedio';
         }
-        if (!(ingreso > 0)) {
+        if (!(ingreso > 0) && !pedido) {
             return res.json({ hayIngresos: false, message: 'Aún no tienes ingresos registrados.' });
         }
 
         const [[usuario]] = await connection.query('SELECT porcentaje_ahorro_meta FROM usuarios WHERE id_usuario = ?', [id]);
         const ahorroPct = Math.min(50, Math.max(10, Number(usuario.porcentaje_ahorro_meta) || 10));
-        const total = Math.round((ingreso * (100 - ahorroPct)) / 100 / 1000) * 1000;
+        const total = pedido || Math.round((ingreso * (100 - ahorroPct)) / 100 / 1000) * 1000;
+        const paso = total >= 100000 ? 1000 : 1;
 
         const [cats] = await connection.query(
             "SELECT id_categoria, nombre, (id_usuario IS NOT NULL) AS propia FROM categorias WHERE tipo = 'gasto' AND activa = 1 AND (id_usuario IS NULL OR id_usuario = ?)", [id]
@@ -216,17 +219,24 @@ router.get('/:anio/:mes/sugerido-ia', async (req, res) => {
             return totalHist ? 0.5 * porDefecto + 0.5 * h : porDefecto;
         });
         const sumaPesos = pesos.reduce((t, w) => t + w, 0);
-        let limites = cats.map((c, i) => ({ id_categoria: c.id_categoria, categoria: c.nombre, monto_limite: Math.round((total * pesos[i]) / sumaPesos / 1000) * 1000 }))
+        let limites = cats.map((c, i) => ({ id_categoria: c.id_categoria, categoria: c.nombre, monto_limite: Math.round((total * pesos[i]) / sumaPesos / paso) * paso }))
             .filter((l) => l.monto_limite > 0);
         // El redondeo no debe pasar el total
         let exceso = limites.reduce((t, l) => t + l.monto_limite, 0) - total;
         for (let i = 0; exceso > 0 && i < limites.length; i = (i + 1) % limites.length) {
-            const rebaja = Math.min(1000, exceso);
+            const rebaja = Math.min(paso, exceso);
             if (limites[i].monto_limite > rebaja) { limites[i].monto_limite -= rebaja; exceso -= rebaja; }
         }
+        // Si por el redondeo falta algo para llegar al total pedido, se suma a la categoría más grande
+        const falta = total - limites.reduce((t, l) => t + l.monto_limite, 0);
+        if (pedido && falta > 0 && limites.length) limites.reduce((a, b) => (b.monto_limite > a.monto_limite ? b : a)).monto_limite += falta;
+        const dinero = (n) => Math.round(n).toLocaleString('es-CO');
+        const explicacion = pedido
+            ? `Repartí tu presupuesto de ${dinero(total)} entre tus categorías según una distribución sana${totalHist ? ' ajustada a lo que realmente gastas' : ''}. La suma de los límites es exactamente ${dinero(total)}.`
+            : `Con ${fuente === 'indicado' ? 'el dinero disponible que indicaste' : 'ingresos'} de ${dinero(ingreso)}${fuente === 'promedio' ? ' (promedio de tus últimos 3 meses)' : fuente === 'mes' ? ' este mes' : ''}, separé el ${ahorroPct}% para ahorrar y repartí el resto entre tus categorías según una distribución sana${totalHist ? ' ajustada a lo que realmente gastas' : ''}.`;
         res.json({
             hayIngresos: true, ingresoBase: ingreso, fuenteIngreso: fuente, ahorroPct, monto_total: total, limites,
-            explicacion: `Con ${fuente === 'indicado' ? 'el dinero disponible que indicaste' : 'ingresos'} de ${Math.round(ingreso).toLocaleString('es-CO')}${fuente === 'promedio' ? ' (promedio de tus últimos 3 meses)' : fuente === 'mes' ? ' este mes' : ''}, separé el ${ahorroPct}% para ahorrar y repartí el resto entre tus categorías según una distribución sana${totalHist ? ' ajustada a lo que realmente gastas' : ''}.`,
+            explicacion,
         });
     } catch (error) {
         errorServidor(res, 'Sugiriendo presupuesto con IA', error, 'No se pudo calcular la sugerencia');

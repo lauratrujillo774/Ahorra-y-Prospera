@@ -148,14 +148,16 @@
     boton.disabled = true;
     boton.textContent = '✦ Analizando tus ingresos…';
     try {
-      let s = await api(`/presupuestos/${a}/${m}/sugerido-ia`);
+      // Si ya escribiste el total del presupuesto, la IA reparte exactamente ese valor
+      let pedido = Number($('#total').value) > 0 ? Number($('#total').value) : 0;
+      let s = await api(`/presupuestos/${a}/${m}/sugerido-ia${pedido ? `?total=${pedido}` : ''}`);
       if (!s.hayIngresos) {
-        // Sin ingresos registrados se puede crear igual: la persona indica cuánto dinero tiene disponible
-        const v = await modal({ titulo: 'Presupuesto sin ingresos registrados', descripcion: 'Aún no tienes ingresos en la app. Dinos cuánto dinero tienes disponible para este mes y armamos el presupuesto con ese valor.',
-          campos: [{ k: 'ingreso', label: 'Dinero disponible este mes', tipo: 'number', min: 1, step: 1000, req: true, placeholder: 'Ej. 1500000' }], textoOk: 'Generar presupuesto' });
-        const indicado = Number(v?.ingreso);
-        if (!(indicado > 0)) return;
-        s = await api(`/presupuestos/${a}/${m}/sugerido-ia?ingreso=${indicado}`);
+        // Sin ingresos registrados se puede crear igual: la persona indica de cuánto quiere el presupuesto
+        const v = await modal({ titulo: 'Presupuesto sin ingresos registrados', descripcion: 'Aún no tienes ingresos en la app. Dinos de cuánto quieres tu presupuesto de este mes y lo repartimos por categorías.',
+          campos: [{ k: 'total', label: 'Valor de tu presupuesto', tipo: 'number', min: 1, step: 1000, req: true, placeholder: 'Ej. 1000000' }], textoOk: 'Generar presupuesto' });
+        pedido = Number(v?.total);
+        if (!(pedido > 0)) return;
+        s = await api(`/presupuestos/${a}/${m}/sugerido-ia?total=${pedido}`);
       }
       formulario(actual, s);
       mostrarEditor(true);

@@ -33,7 +33,8 @@ class Server {
 
         // La página web (así funciona en internet con una sola dirección).
         // Solo se publica la carpeta frontend/: nunca backend/ (ahí está el .env)
-        this.app.use(express.static(raizProyecto + 'frontend'));
+        // "no-cache": el navegador siempre comprueba si hay una versión nueva, así los cambios se ven sin vaciar la caché
+        this.app.use(express.static(raizProyecto + 'frontend', { setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache') }));
     }
 
     routes() {

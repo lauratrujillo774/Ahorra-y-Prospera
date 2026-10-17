@@ -3,7 +3,6 @@
   const { api } = window.APSesion;
   const { dinero, esc, $, barra, intentar, aviso } = window.UI;
   const TEMAS = { todos: 'Todos', ahorro: 'Ahorro', presupuesto: 'Presupuesto', inversiones: 'Inversiones', deudas: 'Deudas', general: 'General' };
-  const ICONO = { curso: '🎓', articulo: '📄', guia: '🧭', consejo: '💡', video: '▶️' };
   const PROV = { gemini: 'Gemini', groq: 'Groq', anthropic: 'Claude' };
   const md = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
   let lecciones = [];
@@ -12,8 +11,8 @@
   // ---------- Tarjeta de lección (se usa en "Para ti" y en "Lecciones") ----------
   const tarjeta = (l) => `
     <article class="panel leccion" data-id="${l.id_contenido}" tabindex="0" role="button" aria-label="Abrir ${esc(l.titulo)}">
-      <div class="etiquetas"><span class="etiqueta-mini">${ICONO[l.tipo] || '📄'} ${l.tipo}</span><span class="etiqueta-mini">${l.nivel}</span>${l.completado ? '<span class="etiqueta-mini" style="background:#15803d;color:#fff">completada ✓</span>' : ''}</div>
-      <h3>${esc(l.titulo)}</h3>${l.razon ? `<p class="sub" style="margin:0;color:#15803d;font-weight:600">💡 ${esc(l.razon)}</p>` : `<p class="sub" style="margin:0">${esc(l.resumen || '')}</p>`}${barra(l.porcentaje)}
+      <div class="etiquetas"><span class="etiqueta-mini">${l.tipo}</span><span class="etiqueta-mini">${l.nivel}</span>${l.completado ? '<span class="etiqueta-mini" style="background:#15803d;color:#fff">completada</span>' : ''}</div>
+      <h3>${esc(l.titulo)}</h3>${l.razon ? `<p class="sub" style="margin:0;color:#15803d;font-weight:600">${esc(l.razon)}</p>` : `<p class="sub" style="margin:0">${esc(l.resumen || '')}</p>`}${barra(l.porcentaje)}
     </article>`;
 
   const buscar = (id) => lecciones.find((x) => String(x.id_contenido) === String(id)) || recomendadasCache.find((x) => String(x.id_contenido) === String(id));
@@ -39,13 +38,13 @@
   $('#generarLeccion').addEventListener('click', async () => {
     const boton = $('#generarLeccion');
     boton.disabled = true;
-    boton.textContent = '✦ Preparando tu lección…';
+    boton.textContent = 'Preparando tu lección…';
     try {
       const l = await api('/educacion/leccion-ia', { method: 'POST', cuerpo: { tema: $('#temaLeccion').value } });
       $('#leccionIA').innerHTML = `<div class="leccion-ia"><b>${esc(l.titulo)}</b>\n\n${md(l.texto)}</div>
         <p class="ayuda-ap" style="margin-top:8px">${l.modo === 'ia' ? `Generada con IA (${esc(PROV[l.proveedor] || l.proveedor)}) · te quedan ${l.restantes} de ${l.limite} consultas hoy.` : 'Lección armada con tus datos (la IA no está disponible o llegaste al límite de hoy).'} Es contenido educativo, no asesoría personalizada.</p>`;
     } catch (e) { aviso(e.message, 'error'); }
-    finally { boton.disabled = false; boton.textContent = '✦ Generar mi lección'; }
+    finally { boton.disabled = false; boton.textContent = 'Generar mi lección'; }
   });
 
   // ---------- Lecciones ----------
@@ -53,7 +52,7 @@
     const hechas = lecciones.filter((l) => l.completado).length;
     const pct = lecciones.length ? Math.round((hechas / lecciones.length) * 100) : 0;
     $('#resumen').textContent = `${hechas} de ${lecciones.length} lecciones completadas`;
-    $('#progresoGeneral').innerHTML = barra(pct) + `<p class="sub" style="margin:10px 0 0">${pct === 100 ? '¡Completaste todo! 🎉' : 'Completa una lección para ganar el logro "Estudiante financiero".'}</p>`;
+    $('#progresoGeneral').innerHTML = barra(pct) + `<p class="sub" style="margin:10px 0 0">${pct === 100 ? '¡Completaste todo!' : 'Completa una lección para ganar el logro "Estudiante financiero".'}</p>`;
     $('#filtros').innerHTML = Object.entries(TEMAS).map(([k, t]) => `<button class="filtro ${k === filtro ? 'activo' : ''}" data-tema="${k}">${t}</button>`).join('');
     const visibles = lecciones.filter((l) => filtro === 'todos' || l.tema === filtro);
     $('#lecciones').innerHTML = visibles.length ? visibles.map(tarjeta).join('') : '<div class="panel vacio">No hay lecciones en este tema.</div>';
@@ -68,7 +67,7 @@
       <h3 style="margin-top:10px">${esc(l.titulo)}</h3><div class="lectura" style="margin:14px 0">${esc(l.contenido || l.resumen || 'Contenido próximamente.')}</div>
       ${l.url_recurso ? `<p><a href="${esc(l.url_recurso)}" target="_blank" rel="noopener">Ver recurso adicional ↗</a></p>` : ''}
       <div class="acciones-plan" style="justify-content:flex-end"><button class="boton-ap suave" data-cerrar>Cerrar</button>
-      <button class="boton-ap principal" data-completar ${l.completado ? 'disabled' : ''}>${l.completado ? 'Completada ✓' : 'Marcar como completada'}</button></div></div>`;
+      <button class="boton-ap principal" data-completar ${l.completado ? 'disabled' : ''}>${l.completado ? 'Completada' : 'Marcar como completada'}</button></div></div>`;
     document.body.appendChild(fondo);
     fondo.addEventListener('click', async (e) => {
       if (e.target === fondo || e.target.closest('[data-cerrar]')) { fondo.remove(); recargar(); }
@@ -103,7 +102,7 @@
 
   function pintarFinal() {
     const total = quiz.preguntas.length;
-    const msg = aciertos === total ? '¡Perfecto! 🏆 Dominas este tema.' : aciertos >= 2 ? '¡Muy bien! 👏 Vas por buen camino.' : 'Sigue practicando 💪 Repasa las lecciones de este tema.';
+    const msg = aciertos === total ? '¡Perfecto! Dominas este tema.' : aciertos >= 2 ? '¡Muy bien! Vas por buen camino.' : 'Sigue practicando Repasa las lecciones de este tema.';
     $('#quiz').innerHTML = `<div class="kpi verde" style="text-align:center"><small>Tu resultado</small><b style="font-size:40px">${aciertos} / ${total}</b><em>${msg}</em></div>
       <p class="ayuda-ap" style="margin-top:10px">${quiz.modo === 'ia' ? `Actividad generada con IA (${esc(PROV[quiz.proveedor] || quiz.proveedor)}) · te quedan ${quiz.restantes} de ${quiz.limite} consultas hoy.` : 'Actividad con preguntas preparadas.'}</p>
       <div class="acciones-plan" style="margin-top:14px"><button class="boton-ap principal" id="otraVez">Otra actividad</button></div>`;

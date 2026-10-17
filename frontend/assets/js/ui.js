@@ -33,7 +33,7 @@
   async function intentar(promesa, mensajeOk) {
     try {
       const r = await promesa;
-      aviso(mensajeOk || r.message || 'Listo ✓');
+      aviso(mensajeOk || r.message || 'Listo');
       return r;
     } catch (e) {
       aviso(e.message, 'error');

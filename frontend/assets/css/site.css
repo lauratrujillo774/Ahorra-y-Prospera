@@ -92,7 +92,7 @@ h1, h2, h3 { line-height: 1.15; margin: 0; }
 .hero-inicio .lead { font-size: 1.15rem; color: var(--suave); margin: 22px 0 32px; max-width: 540px; }
 .hero-botones { display: flex; gap: 14px; flex-wrap: wrap; }
 .hero-confianza { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 30px; color: var(--suave); font-size: 14px; }
-.hero-confianza span::before { content: '✓ '; color: var(--verde-600); font-weight: 700; }
+.hero-confianza span::before { content: ''; color: var(--verde-600); font-weight: 700; }
 
 /* Maqueta del panel */
 .maqueta {
@@ -183,7 +183,7 @@ h1, h2, h3 { line-height: 1.15; margin: 0; }
 .auth-lado .logo small { color: #b9dcc7; }
 .auth-lado h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); color: #fff; margin-bottom: 14px; }
 .auth-lado ul { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
-.auth-lado li::before { content: '✓'; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 10px; border-radius: 50%; background: rgba(34, 197, 94, .3); font-size: 13px; }
+.auth-lado li::before { content: ''; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 10px; border-radius: 50%; background: rgba(34, 197, 94, .3); font-size: 13px; }
 .auth-lado small { color: #b9dcc7; }
 .auth-panel { display: grid; place-items: center; padding: 40px 22px; background: var(--fondo); }
 .auth-caja { width: min(440px, 100%); }

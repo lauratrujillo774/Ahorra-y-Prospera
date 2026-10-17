@@ -85,23 +85,26 @@ export async function enviarCorreo({ para, asunto, html, texto }) {
         console.log(`[correo] Correo sin configurar: no se envió "${asunto}" a ${para}`);
         return false;
     }
-    try {
-        if (usaAppsScript()) {
-            await enviarPorAppsScript({ para, asunto, html, texto });
-        } else if (usaBrevo()) {
-            await enviarPorBrevo({ para, asunto, html, texto });
-        } else {
-            await obtenerTransporte().sendMail({
-                from: process.env.SMTP_FROM || `Ahorra y Prospera <${process.env.SMTP_USER}>`,
-                to: para,
-                subject: asunto,
-                html,
-                text: texto,
-            });
-        }
-        return true;
-    } catch (error) {
-        console.error('[correo] No se pudo enviar:', error.message);
-        return false;
+    // Se prueba cada método configurado en orden; si uno falla, se intenta el siguiente
+    const metodos = [];
+    if (usaAppsScript()) metodos.push(() => enviarPorAppsScript({ para, asunto, html, texto }));
+    if (usaBrevo()) metodos.push(() => enviarPorBrevo({ para, asunto, html, texto }));
+    if (usaSmtp()) {
+        metodos.push(() => obtenerTransporte().sendMail({
+            from: process.env.SMTP_FROM || `Ahorra y Prospera <${process.env.SMTP_USER}>`,
+            to: para,
+            subject: asunto,
+            html,
+            text: texto,
+        }));
     }
+    for (const metodo of metodos) {
+        try {
+            await metodo();
+            return true;
+        } catch (error) {
+            console.error('[correo] No se pudo enviar:', error.message);
+        }
+    }
+    return false;
 }

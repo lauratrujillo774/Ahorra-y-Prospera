@@ -52,7 +52,7 @@
       fondo.innerHTML = `<div class="ap-modal" style="text-align:center"><h3>Así se verá tu foto</h3>
         <div class="foto-previa" style="background-image:url('${url}')"></div>
         <p class="sub">Recortamos tu imagen al centro para que quede bien en el círculo.</p>
-        <div class="acciones-plan" style="justify-content:center"><button class="boton-ap suave" data-no>Elegir otra</button><button class="boton-ap principal" data-si>✔ Usar esta foto</button></div></div>`;
+        <div class="acciones-plan" style="justify-content:center"><button class="boton-ap suave" data-no>Elegir otra</button><button class="boton-ap principal" data-si>Usar esta foto</button></div></div>`;
       document.body.appendChild(fondo);
       const fin = (v) => { fondo.remove(); resolver(v); };
       fondo.addEventListener('click', (e) => { if (e.target === fondo || e.target.closest('[data-no]')) fin(false); if (e.target.closest('[data-si]')) fin(true); });
@@ -82,7 +82,7 @@
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.message || 'No se pudo subir la foto');
       await refrescarUsuario();
-      aviso('Foto de perfil actualizada ✓');
+      aviso('Foto de perfil actualizada');
     } catch (err) { avisar('mensajeFoto', err.message === 'Failed to fetch' ? 'No se pudo conectar con el servidor.' : err.message); }
   });
   $('#quitarFoto').addEventListener('click', async () => {
@@ -99,7 +99,7 @@
     $('#fecha_nacimiento').value = p.fecha_nacimiento || ''; $('#porcentaje').value = p.porcentaje_ahorro_meta; $('#tema').value = p.tema;
     $('#id_moneda').innerHTML = lista.map((m) => `<option value="${m.id_moneda}" ${m.id_moneda === p.id_moneda ? 'selected' : ''}>${esc(m.nombre)} (${m.codigo})</option>`).join('');
     pintarFoto(urlArchivo(p.foto_perfil));
-    $('#sesiones').innerHTML = sesiones.map((s) => `<div class="mov" style="grid-template-columns:auto 1fr"><div class="mov-ic">${s.actual ? '✓' : '💻'}</div><div><b>${s.actual ? 'Esta sesión' : 'Otra sesión'}</b><small>${esc((s.navegador || 'Navegador desconocido').slice(0, 70))}<br>IP ${esc(s.ip || '—')} · desde ${fecha(s.inicio_en.slice(0, 10))}</small></div></div>`).join('') || '<div class="vacio">Sin sesiones.</div>';
+    $('#sesiones').innerHTML = sesiones.map((s) => `<div class="mov" style="grid-template-columns:auto 1fr"><div class="mov-ic">${s.actual ? '' : ''}</div><div><b>${s.actual ? 'Esta sesión' : 'Otra sesión'}</b><small>${esc((s.navegador || 'Navegador desconocido').slice(0, 70))}<br>IP ${esc(s.ip || '—')} · desde ${fecha(s.inicio_en.slice(0, 10))}</small></div></div>`).join('') || '<div class="vacio">Sin sesiones.</div>';
   }
 
   // Pregunta qué hacer con los valores cuando se cambia la moneda
@@ -138,7 +138,7 @@
       localStorage.setItem('ap-theme', cuerpo.tema === 'oscuro' ? 'dark' : 'light');
       document.body.classList.toggle('light', cuerpo.tema !== 'oscuro');
       avisar('mensajePerfil', r.message, 'ok');
-      aviso(r.convertido ? 'Perfil y valores actualizados ✓' : 'Perfil actualizado ✓');
+      aviso(r.convertido ? 'Perfil y valores actualizados' : 'Perfil actualizado');
     } catch (err) { avisar('mensajePerfil', err.message); }
   });
 
@@ -149,7 +149,7 @@
     try {
       await api('/perfil/contrasena', { method: 'PUT', cuerpo: { actual: $('#actual').value, nueva: $('#nueva').value } });
       e.target.reset();
-      avisar('mensajeClave', 'Contraseña actualizada ✓ (se cerraron tus demás sesiones)', 'ok');
+      avisar('mensajeClave', 'Contraseña actualizada (se cerraron tus demás sesiones)', 'ok');
       cargarPerfil();
     } catch (err) { avisar('mensajeClave', err.message); }
   });

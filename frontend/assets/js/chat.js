@@ -28,7 +28,7 @@
     else modo.textContent = 'Asesor básico: responde los temas más comunes. Conecta una IA gratuita (Gemini o Groq) en backend/.env para respuestas sobre cualquier tema.';
   }
 
-  burbuja('ia', '¡Hola! 👋 Soy tu asesor financiero. Te explico con palabras sencillas cómo ahorrar, salir de deudas e invertir con prudencia: CDT, fondos, bonos, acciones, riesgo y más. ¿Qué quieres aprender hoy?');
+  burbuja('ia', '¡Hola! Soy tu asesor financiero. Te explico con palabras sencillas cómo ahorrar, salir de deudas e invertir con prudencia: CDT, fondos, bonos, acciones, riesgo y más. ¿Qué quieres aprender hoy?');
   $('#chatSugerencias').innerHTML = SUGERENCIAS.map((s) => `<button type="button" class="chip-sug">${esc(s)}</button>`).join('');
 
   async function preguntar(texto) {

@@ -2,7 +2,7 @@
 // Las tasas son referencias educativas, no promesas de rentabilidad.
 window.CATALOGO_INVERSION = {
   'Ahorro programado': {
-    icono: '🐷', tasa: 4, plazo: 'Flexible (meses)', liquidez: 'Alta', minimo: 'Desde $10.000',
+    icono: '', tasa: 4, plazo: 'Flexible (meses)', liquidez: 'Alta', minimo: 'Desde $10.000',
     que: 'Aportes periódicos y automáticos a una cuenta o producto de ahorro. Es la forma más simple de crear el hábito de ahorrar y de reunir dinero para metas cercanas.',
     ventajas: ['Muy bajo riesgo', 'Crea disciplina con aportes automáticos', 'Dinero disponible con facilidad'],
     desventajas: ['Rentabilidad baja, a veces cercana a la inflación', 'Poco crecimiento a largo plazo'],
@@ -10,7 +10,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Compara la tasa efectiva anual y las cuotas de manejo de la cuenta.',
   },
   'CDT / Depósito a término': {
-    icono: '🏦', tasa: 9.5, plazo: '30 días a varios años', liquidez: 'Baja (hasta el vencimiento)', minimo: 'Desde ~$500.000',
+    icono: '', tasa: 9.5, plazo: '30 días a varios años', liquidez: 'Baja (hasta el vencimiento)', minimo: 'Desde ~$500.000',
     que: 'Prestas dinero a un banco por un plazo fijo y él te paga una tasa pactada de antemano. Al vencer recibes tu capital más los intereses.',
     ventajas: ['Rentabilidad conocida desde el inicio', 'Riesgo bajo; en Colombia cuenta con el seguro de depósitos de Fogafín hasta cierto monto', 'Fácil de entender'],
     desventajas: ['No puedes retirar antes sin penalidad', 'La retención en la fuente baja la rentabilidad neta', 'Si la inflación sube, puede rendir poco en términos reales'],
@@ -18,7 +18,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Compara la tasa E.A. entre entidades y verifica que la entidad esté vigilada por la Superintendencia Financiera.',
   },
   'Fondo de inversión colectiva': {
-    icono: '🤝', tasa: 8.5, plazo: 'Flexible', liquidez: 'Media a alta', minimo: 'Desde ~$200.000',
+    icono: '', tasa: 8.5, plazo: 'Flexible', liquidez: 'Media a alta', minimo: 'Desde ~$200.000',
     que: 'El dinero de muchas personas se junta y un gestor profesional lo invierte en un portafolio (renta fija, mixto o variable). Tú tienes participaciones cuyo valor sube o baja.',
     ventajas: ['Diversificación con poco dinero', 'Manejo profesional', 'Hay fondos de bajo, medio y mayor riesgo'],
     desventajas: ['El valor puede bajar', 'Cobran comisión de administración', 'Algunos tienen pacto de permanencia'],
@@ -26,7 +26,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Lee la ficha técnica: perfil de riesgo, comisiones y rentabilidad histórica neta.',
   },
   'Fondo de pensiones voluntarias': {
-    icono: '🌴', tasa: 8, plazo: 'Largo plazo (años)', liquidez: 'Baja a media', minimo: 'Desde ~$100.000',
+    icono: '', tasa: 8, plazo: 'Largo plazo (años)', liquidez: 'Baja a media', minimo: 'Desde ~$100.000',
     que: 'Ahorro de largo plazo pensado para tu retiro, con posibles beneficios tributarios. Puedes elegir portafolios de menor o mayor riesgo.',
     ventajas: ['Aprovecha el interés compuesto por décadas', 'Posible beneficio tributario', 'Complementa la pensión obligatoria'],
     desventajas: ['Retirar antes puede implicar costos o perder beneficios', 'Rentabilidad variable según el portafolio'],
@@ -34,7 +34,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Revisa las condiciones de retiro anticipado y los costos del fondo.',
   },
   'Bonos': {
-    icono: '📜', tasa: 10, plazo: '1 a 30 años', liquidez: 'Media', minimo: 'Desde varios millones (o vía fondos)',
+    icono: '', tasa: 10, plazo: '1 a 30 años', liquidez: 'Media', minimo: 'Desde varios millones (o vía fondos)',
     que: 'Son préstamos que haces a una empresa o al gobierno. Te pagan intereses periódicos (cupones) y devuelven el capital al vencimiento.',
     ventajas: ['Ingresos periódicos por cupones', 'Aportan estabilidad a un portafolio', 'Plazos y tasas conocidos'],
     desventajas: ['Riesgo de que el emisor no pague', 'Si suben las tasas, su precio cae', 'Montos mínimos altos'],
@@ -42,7 +42,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Revisa la calificación de riesgo del emisor y el plazo.',
   },
   'Acciones': {
-    icono: '📈', tasa: 12, plazo: '5 años o más', liquidez: 'Alta (en bolsa)', minimo: 'Desde ~$100.000 vía comisionista',
+    icono: '', tasa: 12, plazo: '5 años o más', liquidez: 'Alta (en bolsa)', minimo: 'Desde ~$100.000 vía comisionista',
     que: 'Compras una pequeña parte de una empresa. Ganas si su valor sube o si reparte dividendos; pierdes si baja.',
     ventajas: ['Mayor potencial de crecimiento a largo plazo', 'Dividendos', 'Alta liquidez'],
     desventajas: ['Alta volatilidad: puede caer 20-40% en una crisis', 'Puedes perder parte o todo lo invertido', 'Exige paciencia y estudio'],
@@ -50,7 +50,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Diversifica, no inviertas por "datos calientes" y usa solo comisionistas autorizados.',
   },
   'Cuenta de ahorros de alto rendimiento': {
-    icono: '💳', tasa: 7, plazo: 'Sin plazo', liquidez: 'Muy alta', minimo: 'Variable',
+    icono: '', tasa: 7, plazo: 'Sin plazo', liquidez: 'Muy alta', minimo: 'Variable',
     que: 'Cuenta que paga más intereses que una de ahorros tradicional, a veces con montos mínimos o por tramos de saldo.',
     ventajas: ['Disponibilidad inmediata', 'Rinde más que una cuenta normal', 'Riesgo muy bajo'],
     desventajas: ['La tasa puede cambiar', 'A veces exige saldo mínimo o cobra cuota de manejo'],
@@ -58,7 +58,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Pregunta si la tasa es fija o variable y qué comisiones tiene.',
   },
   'Fondo de cesantías': {
-    icono: '👷', tasa: 8, plazo: 'Largo plazo', liquidez: 'Condicionada', minimo: 'Automático (empleo formal)',
+    icono: '', tasa: 8, plazo: 'Largo plazo', liquidez: 'Condicionada', minimo: 'Automático (empleo formal)',
     que: 'Las cesantías son un ahorro del trabajador que el empleador consigna a un fondo. Puedes elegir el portafolio (conservador o de mayor riesgo).',
     ventajas: ['Ahorro automático por ley', 'Puedes elegir un portafolio con más rentabilidad esperada', 'Sirven para vivienda o estudio'],
     desventajas: ['Solo se retiran en casos permitidos', 'Portafolios de mayor riesgo pueden bajar'],
@@ -66,7 +66,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Revisa el portafolio en el que están tus cesantías y su rentabilidad.',
   },
   'ETF / fondos cotizados': {
-    icono: '🧺', tasa: 10, plazo: '5 años o más', liquidez: 'Alta', minimo: 'Desde ~$100.000',
+    icono: '', tasa: 10, plazo: '5 años o más', liquidez: 'Alta', minimo: 'Desde ~$100.000',
     que: 'Un ETF es una canasta de muchas acciones o bonos que se compra como una sola acción en bolsa. Replica un índice (por ejemplo, el mercado de EE. UU.).',
     ventajas: ['Diversificación inmediata', 'Costos bajos', 'Se compran y venden fácilmente'],
     desventajas: ['Sigue al mercado: baja cuando el mercado baja', 'Puede implicar riesgo cambiario si es internacional'],
@@ -74,7 +74,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Entiende qué índice replica y los costos del intermediario.',
   },
   'TES (títulos del Tesoro)': {
-    icono: '🏛️', tasa: 10, plazo: '1 a 30 años', liquidez: 'Media a alta', minimo: 'Desde ~$1.000.000',
+    icono: '', tasa: 10, plazo: '1 a 30 años', liquidez: 'Media a alta', minimo: 'Desde ~$1.000.000',
     que: 'Deuda emitida por el gobierno nacional. Pagan una tasa fija o ligada a la inflación y se pueden vender antes del vencimiento.',
     ventajas: ['Respaldo del Estado', 'Hay opciones que protegen de la inflación', 'Se pueden vender en el mercado'],
     desventajas: ['Su precio varía con las tasas de interés', 'Requiere cuenta en un comisionista o banco'],
@@ -82,7 +82,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Si vendes antes del vencimiento puedes ganar o perder según el precio de mercado.',
   },
   'Finca raíz / inmuebles': {
-    icono: '🏠', tasa: 9, plazo: '5 a 20 años', liquidez: 'Baja', minimo: 'Alto (cuota inicial)',
+    icono: '', tasa: 9, plazo: '5 a 20 años', liquidez: 'Baja', minimo: 'Alto (cuota inicial)',
     que: 'Comprar vivienda, locales o lotes para arrendarlos o esperar que se valoricen.',
     ventajas: ['Genera renta mensual', 'Suele conservar valor frente a la inflación', 'Activo tangible'],
     desventajas: ['Requiere mucho capital', 'Es difícil de vender rápido', 'Costos de impuestos, administración y mantenimiento', 'Riesgo de vacancia y de mora del arrendatario'],
@@ -90,7 +90,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Calcula la rentabilidad neta (arriendo menos costos) y evita endeudarte más de 30-35% de tus ingresos.',
   },
   'Fondos inmobiliarios (REIT)': {
-    icono: '🏢', tasa: 9, plazo: '3 años o más', liquidez: 'Media', minimo: 'Desde ~$1.000.000',
+    icono: '', tasa: 9, plazo: '3 años o más', liquidez: 'Media', minimo: 'Desde ~$1.000.000',
     que: 'Participas en un portafolio de inmuebles (oficinas, locales, bodegas) con poco dinero y recibes parte de las rentas.',
     ventajas: ['Exposición a inmuebles sin comprar uno completo', 'Diversificación', 'Renta periódica'],
     desventajas: ['El valor de la participación puede bajar', 'Comisiones', 'Liquidez limitada según el fondo'],
@@ -98,7 +98,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Revisa qué inmuebles tiene el fondo, su ocupación y sus comisiones.',
   },
   'Divisas (dólar, euro)': {
-    icono: '💵', tasa: 3, plazo: 'Variable', liquidez: 'Alta', minimo: 'Bajo',
+    icono: '', tasa: 3, plazo: 'Variable', liquidez: 'Alta', minimo: 'Bajo',
     que: 'Comprar moneda extranjera para protegerte de la devaluación o para pagos futuros en el exterior. Su precio sube y baja con el tipo de cambio.',
     ventajas: ['Protege si tus gastos futuros serán en otra moneda', 'Diversifica fuera de tu moneda local'],
     desventajas: ['No genera intereses por sí solo', 'El tipo de cambio es impredecible', 'Comisiones al comprar y vender'],
@@ -106,7 +106,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Es una cobertura, no una forma segura de ganar dinero.',
   },
   'Oro y metales preciosos': {
-    icono: '🪙', tasa: 6, plazo: 'Largo plazo', liquidez: 'Media', minimo: 'Bajo (vía fondos) o alto (físico)',
+    icono: '', tasa: 6, plazo: 'Largo plazo', liquidez: 'Media', minimo: 'Bajo (vía fondos) o alto (físico)',
     que: 'Activo de refugio que suele conservar valor en épocas de crisis o inflación alta.',
     ventajas: ['Refugio en crisis', 'Diversifica el portafolio', 'Aceptado en todo el mundo'],
     desventajas: ['No paga intereses ni dividendos', 'Su precio puede estar años sin subir', 'El oro físico implica custodia y seguro'],
@@ -122,7 +122,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Desconfía de promesas de ganancias garantizadas y usa plataformas reconocidas.',
   },
   'Préstamos entre personas (P2P)': {
-    icono: '🔁', tasa: 14, plazo: '6 a 60 meses', liquidez: 'Baja', minimo: 'Desde ~$100.000',
+    icono: '', tasa: 14, plazo: '6 a 60 meses', liquidez: 'Baja', minimo: 'Desde ~$100.000',
     que: 'Prestas dinero a personas o pequeños negocios a través de una plataforma, a cambio de intereses.',
     ventajas: ['Rentabilidad potencial alta', 'Puedes repartir en muchos préstamos'],
     desventajas: ['Riesgo de que no te paguen', 'Poca liquidez', 'Regulación limitada según la plataforma'],
@@ -130,7 +130,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Verifica que la plataforma esté regulada y diversifica en muchos préstamos pequeños.',
   },
   'Negocio propio / emprendimiento': {
-    icono: '🚀', tasa: 0, plazo: 'Largo plazo', liquidez: 'Muy baja', minimo: 'Variable',
+    icono: '', tasa: 0, plazo: 'Largo plazo', liquidez: 'Muy baja', minimo: 'Variable',
     que: 'Crear o invertir en un negocio. Puede dar gran crecimiento, pero también perder todo el capital.',
     ventajas: ['Potencial de crecimiento alto', 'Control sobre tu inversión', 'Genera empleo e ingresos propios'],
     desventajas: ['Riesgo de pérdida total', 'Exige tiempo y dedicación', 'Ingresos irregulares al inicio'],
@@ -138,7 +138,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Separa las finanzas del negocio de las personales y prueba la idea con poco dinero primero.',
   },
   'Seguros con ahorro / rentas': {
-    icono: '🛡️', tasa: 5, plazo: 'Largo plazo', liquidez: 'Baja', minimo: 'Cuotas periódicas',
+    icono: '', tasa: 5, plazo: 'Largo plazo', liquidez: 'Baja', minimo: 'Cuotas periódicas',
     que: 'Seguros que combinan protección (vida, invalidez) con un componente de ahorro, o que pagan una renta periódica.',
     ventajas: ['Protección para tu familia', 'Ahorro disciplinado', 'Posibles beneficios tributarios'],
     desventajas: ['Costos altos que reducen el rendimiento', 'Cancelar antes puede hacerte perder dinero'],
@@ -146,7 +146,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Lee con calma costos, penalidades y qué parte es seguro y qué parte es ahorro.',
   },
   'Derivados (futuros y opciones)': {
-    icono: '⚡', tasa: 0, plazo: 'Corto plazo', liquidez: 'Alta', minimo: 'Variable',
+    icono: '', tasa: 0, plazo: 'Corto plazo', liquidez: 'Alta', minimo: 'Variable',
     que: 'Contratos sobre el precio futuro de un activo, con apalancamiento. Se usan para cubrirse o para especular.',
     ventajas: ['Pueden cubrir riesgos de precio', 'Alto potencial por el apalancamiento'],
     desventajas: ['Riesgo extremo: puedes perder más de lo invertido', 'Muy complejos', 'No aptos para principiantes'],
@@ -154,7 +154,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Si no lo entiendes por completo, no lo hagas.',
   },
   'Educación y capacitación': {
-    icono: '🎓', tasa: 0, plazo: 'Medio y largo plazo', liquidez: 'No aplica', minimo: 'Variable',
+    icono: '', tasa: 0, plazo: 'Medio y largo plazo', liquidez: 'No aplica', minimo: 'Variable',
     que: 'Invertir en tus habilidades (cursos, certificaciones, estudios) para aumentar tus ingresos futuros. Es una inversión en ti.',
     ventajas: ['Puede aumentar tus ingresos de por vida', 'Nadie te lo puede quitar', 'Abre nuevas oportunidades'],
     desventajas: ['El retorno no es inmediato ni garantizado', 'Puede requerir endeudarte si no lo planeas'],
@@ -162,7 +162,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Compara costo y beneficio esperado, y busca becas o financiación de bajo costo.',
   },
   'Materias primas (commodities)': {
-    icono: '🌾', tasa: 0, plazo: 'Variable', liquidez: 'Media', minimo: 'Variable',
+    icono: '', tasa: 0, plazo: 'Variable', liquidez: 'Media', minimo: 'Variable',
     que: 'Productos básicos como petróleo, café o granos, negociados en mercados internacionales; sus precios cambian con oferta, clima y política.',
     ventajas: ['Diversifica el portafolio', 'Puede proteger de la inflación'],
     desventajas: ['Muy volátiles', 'Dependen de factores impredecibles', 'Normalmente se accede por fondos o derivados'],
@@ -170,7 +170,7 @@ window.CATALOGO_INVERSION = {
     cuidado: 'Es mejor acceder a través de fondos diversificados que de contratos directos.',
   },
   'Coleccionables (arte, vehículos clásicos)': {
-    icono: '🖼️', tasa: 0, plazo: 'Muy largo plazo', liquidez: 'Muy baja', minimo: 'Alto',
+    icono: '', tasa: 0, plazo: 'Muy largo plazo', liquidez: 'Muy baja', minimo: 'Alto',
     que: 'Bienes escasos (arte, relojes, autos clásicos, monedas) cuyo valor depende de la demanda de coleccionistas.',
     ventajas: ['Pueden valorizarse mucho', 'Se disfruta el bien mientras tanto'],
     desventajas: ['Difícil de vender', 'Requiere experiencia para valorar', 'Costos de custodia, seguro y autenticación', 'Riesgo de falsificaciones'],

@@ -25,7 +25,7 @@
         menu = document.createElement('div');
         menu.id = 'profile';
         menu.className = 'profile-menu';
-        menu.innerHTML = `<b ${u.foto ? `class="con-foto" style="background-image:url('${u.foto}')"` : ''}>${u.foto ? '' : u.iniciales}</b><div><strong>${u.nombres}</strong><small>Perfil personal</small></div><a href="configuracion.html">⚙ Configuración</a><a href="#" id="cerrarSesion">⎋ Cerrar sesión</a>`;
+        menu.innerHTML = `<b ${u.foto ? `class="con-foto" style="background-image:url('${u.foto}')"` : ''}>${u.foto ? '' : u.iniciales}</b><div><strong>${u.nombres}</strong><small>Perfil personal</small></div><a href="configuracion.html">Configuración</a><a href="#" id="cerrarSesion">Cerrar sesión</a>`;
         document.body.appendChild(menu);
         menu.querySelector('#cerrarSesion').addEventListener('click', (ev) => { ev.preventDefault(); window.APSesion.cerrar(); });
       }
@@ -42,7 +42,7 @@
   if (campana && window.APSesion) {
     const { api } = window.APSesion;
     const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const iconos = { exceso_gasto: '⚠️', vencimiento_pago: '⏰', meta_ahorro: '🎯', logro: '🏆', reto: '💪', sistema: '🔔' };
+    const iconos = { exceso_gasto: '', vencimiento_pago: '', meta_ahorro: '', logro: '', reto: '', sistema: '' };
     const panel = document.createElement('div');
     panel.className = 'panel-notif';
     panel.hidden = true;
@@ -56,8 +56,8 @@
         punto.hidden = noLeidas === 0;
         punto.textContent = noLeidas > 9 ? '9+' : noLeidas;
         panel.querySelector('#listaNotif').innerHTML = notificaciones.length
-          ? notificaciones.map((n) => `<div class="notif ${n.leida ? '' : 'nueva'}" data-id="${n.id_notificacion}"><span class="notif-ic">${iconos[n.tipo] || '🔔'}</span><div><b>${esc(n.titulo)}</b><p>${esc(n.mensaje)}</p></div></div>`).join('')
-          : '<div class="vacio">No tienes notificaciones por ahora 🎉</div>';
+          ? notificaciones.map((n) => `<div class="notif ${n.leida ? '' : 'nueva'}" data-id="${n.id_notificacion}"><span class="notif-ic">${iconos[n.tipo] || ''}</span><div><b>${esc(n.titulo)}</b><p>${esc(n.mensaje)}</p></div></div>`).join('')
+          : '<div class="vacio">No tienes notificaciones por ahora</div>';
       } catch { /* sin conexión */ }
     }
     campana.addEventListener('click', (e) => {

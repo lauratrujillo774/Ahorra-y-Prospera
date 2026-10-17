@@ -146,12 +146,12 @@
     const actual = leerFormulario();
     ponerFormulario({ ...actual, ...d, perfil: actual.perfil, ahorroActual: d.ahorroActual || actual.ahorroActual });
     guardarBorrador();
-    window.avisarApp(d.ingresos.length || d.gastos.length || d.deudas.length ? 'Datos cargados ✓' : 'Aún no tienes movimientos guardados; completa el formulario');
+    window.avisarApp(d.ingresos.length || d.gastos.length || d.deudas.length ? 'Datos cargados' : 'Aún no tienes movimientos guardados; completa el formulario');
   });
 
   // ---------- Resultados ----------
   const pildora = (p) => `<span class="pildora ${p}">${p}</span>`;
-  const iconoRec = { ahorro: '🐷', gasto: '✂️', inversion: '📈', deuda: '💳', presupuesto: '📊', general: '💡' };
+  const iconoRec = { ahorro: '', gasto: '', inversion: '', deuda: '', presupuesto: '', general: '' };
 
   function tabla(cabeceras, filas, pie) {
     return `<div class="tabla-caja"><table class="tabla"><thead><tr>${cabeceras.map((c, i) => `<th class="${i ? 'num' : ''}">${c}</th>`).join('')}</tr></thead>
@@ -208,7 +208,7 @@
         <div class="puntaje" style="--p:${d.puntaje};--color:${color}"><div><b>${d.puntaje}</b><small>de 100</small></div></div>
         <div><span class="etiqueta-nivel ${claseNivel}">Salud financiera: ${d.nivel}</span>
           <h2 style="margin-top:10px">Tu diagnóstico</h2>
-          <p style="margin:0 0 4px"><span class="pildora">🎯 Plan para: ${esc(p.objetivo?.etiqueta || "Plan general")}</span></p>
+          <p style="margin:0 0 4px"><span class="pildora">Plan para: ${esc(p.objetivo?.etiqueta || "Plan general")}</span></p>
           <p class="sub" style="margin:0">Así está tu situación hoy y hacia dónde puedes llevarla.</p></div></div>
         <div class="kpis" style="margin-top:20px">
           <div class="kpi"><small>Ingresos</small><b>${dinero(d.ingresoTotal)}</b></div>
@@ -217,20 +217,20 @@
           <div class="kpi ${d.flujoLibre < 0 ? 'alerta' : ''}"><small>Flujo libre mensual</small><b>${dinero(d.flujoLibre)}</b><em>tasa de ahorro ${d.tasaAhorro}%</em></div>
           <div class="kpi"><small>Fondo de emergencia</small><b>${f.mesesCubiertos} meses</b><em>meta ${f.mesesMeta} meses (${dinero(f.meta)})</em></div>
         </div>
-        ${p.resumenIA ? `<div class="resumen-ia" style="margin-top:20px"><h3>🧠 Resumen de tu asesor</h3>${esc(p.resumenIA)}</div>` : ''}
+        ${p.resumenIA ? `<div class="resumen-ia" style="margin-top:20px"><h3>Resumen de tu asesor</h3>${esc(p.resumenIA)}</div>` : ''}
       </section>
 
       <section class="panel"><h2>Recomendaciones de tu asesor</h2><p class="sub">Ordenadas por prioridad.</p>
         <div class="recomendaciones">${[...p.recomendaciones].sort((a, b) => ['alta', 'media', 'baja'].indexOf(a.prioridad) - ['alta', 'media', 'baja'].indexOf(b.prioridad))
-          .map((x) => `<div class="recomendacion ${x.prioridad}"><div class="icono-rec">${iconoRec[x.tipo] || '💡'}</div><div><h4>${esc(x.titulo)} ${pildora(x.prioridad)}</h4><p>${esc(x.mensaje)}</p></div></div>`).join('')}</div></section>
+          .map((x) => `<div class="recomendacion ${x.prioridad}"><div class="icono-rec">${iconoRec[x.tipo] || ''}</div><div><h4>${esc(x.titulo)} ${pildora(x.prioridad)}</h4><p>${esc(x.mensaje)}</p></div></div>`).join('')}</div></section>
 
       <section class="panel"><h2>¿Cómo repartir tu dinero cada mes?</h2>
         <p class="sub">Capacidad de ahorro mensual: <b>${dinero(p.capacidad.total)}</b>${p.capacidad.recorteSugerido ? ` (incluye ${dinero(p.capacidad.recorteSugerido)} que sale de recortar gastos de deseo)` : ''}.</p>
         <div class="reparto">
-          <div class="kpi"><small>💳 Pago extra de deudas</small><b>${dinero(r.deuda)}</b></div>
-          <div class="kpi"><small>🛟 Fondo de emergencia</small><b>${dinero(r.fondo)}</b></div>
-          <div class="kpi"><small>🎯 Metas de ahorro</small><b>${dinero(r.metas)}</b></div>
-          <div class="kpi"><small>📈 Inversión</small><b>${dinero(r.inversion)}</b></div></div>
+          <div class="kpi"><small>Pago extra de deudas</small><b>${dinero(r.deuda)}</b></div>
+          <div class="kpi"><small>Fondo de emergencia</small><b>${dinero(r.fondo)}</b></div>
+          <div class="kpi"><small>Metas de ahorro</small><b>${dinero(r.metas)}</b></div>
+          <div class="kpi"><small>Inversión</small><b>${dinero(r.inversion)}</b></div></div>
         <h3 style="margin:22px 0 12px">Regla 50 / 30 / 20</h3>
         <div class="barras-regla">${barra('Necesidades + cuotas (50%)', p.regla503020.necesidades.ideal, p.regla503020.necesidades.actual)}
           ${barra('Deseos (30%)', p.regla503020.deseos.ideal, p.regla503020.deseos.actual)}${barra('Ahorro (20%)', p.regla503020.ahorro.ideal, p.regla503020.ahorro.actual)}</div></section>
@@ -241,8 +241,8 @@
         <p class="sub">Fondo meta: <b>${dinero(f.meta)}</b> (${f.mesesMeta} meses de gastos esenciales) · tienes <b>${dinero(f.actual)}</b> · aporte mensual <b>${dinero(f.aporteMensual)}</b>${f.mesesParaCompletar ? ` → completo en ~${f.mesesParaCompletar} meses` : ''}.</p>${metasHtml}</section>
       <section class="panel"><h2>Plan de inversión</h2>${invHtml}</section>
       <section class="panel"><h2>Tu próximo año, mes a mes</h2>${proy}</section>
-      <div class="acciones-plan"><button class="boton-ap principal" type="button" id="descargar2">⇩ Descargar plan en Excel</button>
-        <button class="boton-ap suave" type="button" onclick="window.print()">🖨 Imprimir / guardar PDF</button></div>`;
+      <div class="acciones-plan"><button class="boton-ap principal" type="button" id="descargar2">Descargar plan en Excel</button>
+        <button class="boton-ap suave" type="button" onclick="window.print()">Imprimir / guardar PDF</button></div>`;
     $('#resultado').classList.add('ver');
     $('#descargar2').addEventListener('click', descargar);
     $('#resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -253,7 +253,7 @@
     mensaje.className = 'mensaje-ap';
     const boton = $('#generar');
     boton.disabled = true;
-    boton.textContent = '✦ Analizando tus finanzas…';
+    boton.textContent = 'Analizando tus finanzas…';
     try {
       const plan = await api('/plan/generar', { method: 'POST', cuerpo: leerFormulario() });
       guardarBorrador();
@@ -262,7 +262,7 @@
       avisar(e.message);
     } finally {
       boton.disabled = false;
-      boton.textContent = '✦ Generar mi plan con IA';
+      boton.textContent = 'Generar mi plan con IA';
     }
   }
 
@@ -282,7 +282,7 @@
       a.download = 'plan-financiero-ahorra-y-prospera.xlsx';
       a.click();
       URL.revokeObjectURL(url);
-      window.avisarApp('Excel descargado ✓');
+      window.avisarApp('Excel descargado');
     } catch (e) {
       avisar(e.message === 'Failed to fetch' ? 'No se pudo conectar con el servidor.' : e.message);
     }

@@ -1,6 +1,7 @@
 import { connection } from '../config/mysql/dbmysql.js';
 import { alertarPagosProximos, evaluarAlertasFinancieras } from './alertas.js';
 import { heredarPresupuesto } from './presupuestoMensual.js';
+import { enviarCorreo, plantillaAlerta } from './correo.js';
 
 // Crea una notificación solo si hoy no existe ya una igual (así no se repiten)
 async function avisar(idUsuario, tipo, titulo, mensaje) {
@@ -10,6 +11,16 @@ async function avisar(idUsuario, tipo, titulo, mensaje) {
     );
     if (!ya.length) {
         await connection.query('INSERT INTO notificaciones (id_usuario, tipo, titulo, mensaje) VALUES (?, ?, ?, ?)', [idUsuario, tipo, titulo, mensaje]);
+        const [[usuario]] = await connection.query('SELECT nombres, correo FROM usuarios WHERE id_usuario = ?', [idUsuario]).then(([r]) => [r.length ? r : [undefined]]);
+        if (usuario) {
+            // El correo no bloquea la generación de notificaciones
+            enviarCorreo({
+                para: usuario.correo,
+                asunto: `${titulo} · Ahorra y Prospera`,
+                html: plantillaAlerta({ nombre: usuario.nombres, titulo, mensaje, nivel: tipo === 'vencimiento_pago' ? 'critico' : 'aviso', boton: 'Abrir la app' }),
+                texto: `${titulo}\n\n${mensaje}`,
+            });
+        }
     }
 }
 

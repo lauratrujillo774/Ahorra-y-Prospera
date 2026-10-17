@@ -32,7 +32,7 @@
           <tr><td>${fecha(m.fecha)}</td><td>${esc(m.descripcion || '—')}${m.extra === 1 ? ` <span class="pildora">${esGasto ? 'necesidad' : 'fijo'}</span>` : ''}</td>
           <td><span class="chip-cat"><i style="background:${esc(m.color || '#9E9E9E')}"></i>${esc(m.categoria || 'Sin categoría')}</span></td>
           <td class="num"><b class="${esGasto ? 'neg' : 'pos'}">${esGasto ? '-' : '+'}${dinero(m.monto)}</b></td>
-          <td class="acciones-fila"><button class="icono-btn" data-editar="${m.id}" title="Editar" aria-label="Editar">✏️</button><button class="icono-btn rojo" data-borrar="${m.id}" title="Eliminar" aria-label="Eliminar">🗑️</button></td></tr>`).join('')}</tbody></table></div>`
+          <td class="acciones-fila"><button class="icono-btn" data-editar="${m.id}" title="Editar" aria-label="Editar"></button><button class="icono-btn rojo" data-borrar="${m.id}" title="Eliminar" aria-label="Eliminar"></button></td></tr>`).join('')}</tbody></table></div>`
         : `<div class="vacio">No hay ${esGasto ? 'gastos' : 'ingresos'} en este mes.<br>Usa el formulario para registrar el primero.</div>`;
     }
 
@@ -60,7 +60,7 @@
       const cuerpo = { monto: r('monto').value, descripcion: r('descripcion').value, id_categoria: r('categoria').value, fecha: r('fecha').value, extra: r('extra').checked };
       if (!(Number(cuerpo.monto) > 0)) return avisarForm('Escribe un monto mayor a cero');
       if (!cuerpo.fecha) return avisarForm('Elige la fecha');
-      const res = await intentar(api(editando ? `${ruta}/${editando}` : ruta, { method: editando ? 'PUT' : 'POST', cuerpo }), editando ? 'Cambios guardados ✓' : `${esGasto ? 'Gasto' : 'Ingreso'} registrado ✓`);
+      const res = await intentar(api(editando ? `${ruta}/${editando}` : ruta, { method: editando ? 'PUT' : 'POST', cuerpo }), editando ? 'Cambios guardados' : `${esGasto ? 'Gasto' : 'Ingreso'} registrado`);
       if (res) { limpiarFormulario(); cargar(); }
     });
     r('cancelar').addEventListener('click', limpiarFormulario);
@@ -85,7 +85,7 @@
     r('nuevaCategoria').addEventListener('click', async () => {
       const v = await modal({ titulo: 'Nueva categoría', campos: [{ k: 'nombre', label: 'Nombre', req: true }, { k: 'color', label: 'Color', tipo: 'color', valor: '#15803d' }], textoOk: 'Crear' });
       if (!v) return;
-      const res = await intentar(api('/categorias', { method: 'POST', cuerpo: { nombre: v.nombre, tipo, color: v.color } }), 'Categoría creada ✓');
+      const res = await intentar(api('/categorias', { method: 'POST', cuerpo: { nombre: v.nombre, tipo, color: v.color } }), 'Categoría creada');
       if (res) await cargarCategorias(r('categoria'), tipo, res.id_categoria);
     });
 

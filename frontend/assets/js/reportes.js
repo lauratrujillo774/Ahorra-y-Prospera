@@ -60,7 +60,7 @@
       const a = document.createElement('a');
       a.href = url; a.download = `${secciones.length === 1 ? 'reporte-' + secciones[0] : 'reporte-personalizado'}.${extension}`; a.click();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      window.UI.aviso(`Reporte ${extension.toUpperCase()} descargado ✓`);
+      window.UI.aviso(`Reporte ${extension.toUpperCase()} descargado`);
       historial();
     } catch (err) { aviso(err.message === 'Failed to fetch' ? 'No se pudo conectar con el servidor.' : err.message); }
     finally { boton.disabled = false; boton.textContent = textoBoton; }

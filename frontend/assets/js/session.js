@@ -97,7 +97,7 @@
     if (menu) {
       const salir = document.createElement('a');
       salir.href = '#';
-      salir.innerHTML = '⎋ <span>Cerrar sesión</span>';
+      salir.innerHTML = '<span>Cerrar sesión</span>';
       salir.addEventListener('click', (e) => { e.preventDefault(); cerrar(); });
       menu.append(salir);
     }

@@ -45,7 +45,7 @@
         <div class="kpi ${p.monto_total - p.totalGastado < 0 ? 'rojo' : 'verde'}"><small>${p.monto_total - p.totalGastado < 0 ? 'Te pasaste por' : 'Te queda disponible'}</small><b>${dinero(Math.abs(p.monto_total - p.totalGastado))}</b></div>
         <div class="kpi"><small>Repartido en categorías</small><b>${dinero(p.asignado)}</b><em>${p.porAsignar >= 0 ? `por repartir: ${dinero(p.porAsignar)}` : ''}</em></div>
       </div>${barra(p.porcentaje, clase)}
-      <p class="sub" style="margin:10px 0 16px">${p.porcentaje >= 100 ? '⚠️ Superaste tu presupuesto del mes.' : p.porcentaje >= p.umbral_alerta ? `⚠️ Ya usaste más del ${p.umbral_alerta}% (tu aviso).` : 'Vas dentro del presupuesto. ¡Sigue así!'}</p>
+      <p class="sub" style="margin:10px 0 16px">${p.porcentaje >= 100 ? 'Superaste tu presupuesto del mes.' : p.porcentaje >= p.umbral_alerta ? `Ya usaste más del ${p.umbral_alerta}% (tu aviso).` : 'Vas dentro del presupuesto. ¡Sigue así!'}</p>
       ${filas ? `<div class="tabla-caja"><table class="tabla"><thead><tr><th>Categoría</th><th class="num">Límite</th><th class="num">Gastado</th><th class="num">Disponible</th><th>Uso</th></tr></thead><tbody>${filas}</tbody></table></div>` : '<p class="sub">Aún no repartes el total en categorías: hazlo abajo.</p>'}`;
   }
 
@@ -75,7 +75,7 @@
     if (sugerido) sugerido.limites.forEach((l) => limites.set(l.id_categoria, l.monto_limite));
     else if (p.existe && !previos.size) p.categorias.forEach((c) => { if (c.monto_limite) limites.set(c.id_categoria, c.monto_limite); });
     else previos.forEach((v, k) => limites.set(k, v));
-    $('#limites').innerHTML = categorias.map((c) => `<div class="campo-ap"><label for="lim_${c.id_categoria}">${esc(c.nombre)}${c.propia ? ' ⭐' : ''}</label><input type="number" min="0" step="1000" data-cat="${c.id_categoria}" id="lim_${c.id_categoria}" value="${limites.get(c.id_categoria) ?? ''}"><p class="ayuda-ap"></p></div>`).join('');
+    $('#limites').innerHTML = categorias.map((c) => `<div class="campo-ap"><label for="lim_${c.id_categoria}">${esc(c.nombre)}${c.propia ? '' : ''}</label><input type="number" min="0" step="1000" data-cat="${c.id_categoria}" id="lim_${c.id_categoria}" value="${limites.get(c.id_categoria) ?? ''}"><p class="ayuda-ap"></p></div>`).join('');
     actualizarReparto();
   }
 
@@ -124,7 +124,7 @@
   // Muestra la explicación de una sugerencia con el botón para aplicarla de una vez
   function ofrecerSugerencia(texto) {
     const caja = $('#explicacion');
-    caja.innerHTML = `<span>${esc(texto)}</span><button type="button" class="boton-ap principal chico" id="usarPresupuesto">✔ Usar este presupuesto</button>`;
+    caja.innerHTML = `<span>${esc(texto)}</span><button type="button" class="boton-ap principal chico" id="usarPresupuesto">Usar este presupuesto</button>`;
     caja.className = 'mensaje-ap ver ok sugerencia';
   }
   $('#explicacion').addEventListener('click', (e) => {
@@ -146,7 +146,7 @@
     const { a, m } = periodo();
     const boton = $('#sugerirIA');
     boton.disabled = true;
-    boton.textContent = '✦ Analizando tus ingresos…';
+    boton.textContent = 'Analizando tus ingresos…';
     try {
       // Si ya escribiste el total del presupuesto, la IA reparte exactamente ese valor
       let pedido = Number($('#total').value) > 0 ? Number($('#total').value) : 0;
@@ -164,7 +164,7 @@
       ofrecerSugerencia(s.explicacion + ' Puedes ajustarlo abajo antes de usarlo; al usarlo te enviamos el resumen a tu correo.');
       $('#form').dataset.generado = '1';
     } catch (e) { aviso(e.message, 'error'); }
-    finally { boton.disabled = false; boton.textContent = '✦ Presupuesto sugerido por la IA'; }
+    finally { boton.disabled = false; boton.textContent = 'Presupuesto sugerido por la IA'; }
   });
 
   $('#sugerir').addEventListener('click', async () => {
@@ -183,7 +183,7 @@
     const v = await modal({ titulo: 'Nueva categoría', descripcion: 'Aparecerá aquí para ponerle un límite y también en la sección Gastos.',
       campos: [{ k: 'nombre', label: 'Nombre', req: true, placeholder: 'Ej. Mascotas, Gimnasio, Regalos' }, { k: 'color', label: 'Color', tipo: 'color', valor: '#15803d' }], textoOk: 'Crear categoría' });
     if (!v) return;
-    if (await intentar(api('/categorias', { method: 'POST', cuerpo: { nombre: v.nombre, tipo: 'gasto', color: v.color } }), 'Categoría creada ✓')) {
+    if (await intentar(api('/categorias', { method: 'POST', cuerpo: { nombre: v.nombre, tipo: 'gasto', color: v.color } }), 'Categoría creada')) {
       await cargarCategorias();
       formulario(actual);
       mostrarEditor(true);

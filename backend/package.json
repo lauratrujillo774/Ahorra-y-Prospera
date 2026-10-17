@@ -8,7 +8,8 @@
     "dev": "nodemon app.js",
     "exportar-bd": "node database/exportar.mjs",
     "importar-bd": "node database/importar.mjs",
-    "probar-config": "node scripts/probar-config.mjs"
+    "probar-config": "node scripts/probar-config.mjs",
+    "revisar-usuarios": "node scripts/revisar-usuarios.mjs"
   },
   "keywords": [],
   "author": "",

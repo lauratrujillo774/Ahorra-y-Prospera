@@ -11,7 +11,7 @@
       ? `<div class="tabla-caja"><table class="tabla"><thead><tr><th>Concepto</th><th>Fecha</th><th>Repite</th><th class="num">Monto</th><th>Estado</th><th></th></tr></thead><tbody>${pagos.map((p) => `
         <tr><td><b>${esc(p.concepto)}</b>${p.acreedor ? `<br><small class="texto-suave">Deuda: ${esc(p.acreedor)}</small>` : ''}</td><td>${fecha(p.fecha_pago)}</td><td>${p.frecuencia === 'unico' ? 'Una vez' : p.frecuencia}</td>
         <td class="num">${dinero(p.monto)}</td><td>${p.estado === 'programado' ? etiquetaDias(p) : `<span class="pildora">${p.estado}</span>`}</td>
-        <td class="acciones-fila">${p.estado === 'programado' ? `<button class="mini verde" data-pagar="${p.id_pago_prog}">Pagado</button><button class="mini" data-omitir="${p.id_pago_prog}">Omitir</button>` : ''}<button class="icono-btn rojo" data-borrar="${p.id_pago_prog}" aria-label="Eliminar">🗑️</button></td></tr>`).join('')}</tbody></table></div>`
+        <td class="acciones-fila">${p.estado === 'programado' ? `<button class="mini verde" data-pagar="${p.id_pago_prog}">Pagado</button><button class="mini" data-omitir="${p.id_pago_prog}">Omitir</button>` : ''}<button class="icono-btn rojo" data-borrar="${p.id_pago_prog}" aria-label="Eliminar"></button></td></tr>`).join('')}</tbody></table></div>`
       : '<div class="vacio">No tienes pagos programados.<br>Programa tus cuotas y facturas para que te avisemos a tiempo.</div>';
   }
 
@@ -35,7 +35,7 @@
       ],
       textoOk: 'Programar',
     });
-    if (v && await intentar(api('/pagos', { method: 'POST', cuerpo: v }), 'Pago programado ✓')) cargar();
+    if (v && await intentar(api('/pagos', { method: 'POST', cuerpo: v }), 'Pago programado')) cargar();
   });
 
   $('#listaPagos').addEventListener('click', async (e) => {
@@ -51,7 +51,7 @@
         titulo: `Marcar como pagado: ${p.concepto}`,
         descripcion: `Se registrará un gasto de <b>${dinero(p.monto)}</b> en tu sección de Gastos${p.id_deuda ? ' y se abonará a la deuda' : ''}.`,
         campos: [{ k: 'id_categoria', label: '¿En qué categoría de gasto lo registramos?', tipo: 'select', valor: defecto?.id_categoria ?? '', opciones: [{ valor: '', texto: 'Otros gastos' }, ...cats.map((c) => ({ valor: c.id_categoria, texto: c.nombre }))] }],
-        textoOk: '✔ Pagado y registrar',
+        textoOk: 'Pagado y registrar',
       });
       if (v && await intentar(api(`/pagos/${p.id_pago_prog}/pagar`, { method: 'POST', cuerpo: { id_categoria: v.id_categoria } }))) { cargar(); window.dispatchEvent(new Event('ap-deudas')); }
     }

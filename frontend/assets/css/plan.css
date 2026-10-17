@@ -427,7 +427,7 @@ body:not(.light) .profile.con-foto, body:not(.light) .avatar.con-foto { border-c
 body:not(.light) .foto-grande { border-color: #0e1d17; }
 .foto-grande:hover { transform: scale(1.03); box-shadow: 0 0 0 3px #15803d, 0 18px 36px #0b3d2e44; }
 .foto-grande::after {
-    content: '📷 Cambiar'; position: absolute; inset: auto 0 0 0; padding: 22px 0 9px; text-align: center; font: 700 12px 'DM Sans', sans-serif;
+    content: 'Cambiar'; position: absolute; inset: auto 0 0 0; padding: 22px 0 9px; text-align: center; font: 700 12px 'DM Sans', sans-serif;
     color: #fff; background: linear-gradient(to top, #0b3d2eee, transparent); opacity: 0; transition: opacity .2s;
 }
 .foto-grande:hover::after, .foto-grande:focus-visible::after { opacity: 1; }
@@ -452,3 +452,6 @@ body:not(.light) .foto-grande { border-color: #0e1d17; }
 .patrimonio-total b { font-size: 28px; }
 .patrimonio-total small { color: #bbf7d0; margin-left: auto; }
 @media (max-width: 760px) { .stats-fila.tres { grid-template-columns: 1fr; } .dash .stat-tarjeta { min-height: 0; } }
+
+/* Sin iconos: ocultar contenedores que quedaron vacíos */
+.notif-ic:empty, .tipo-ic:empty, .icono-rec:empty, .medalla:empty, .mov-ic:empty { display: none; }

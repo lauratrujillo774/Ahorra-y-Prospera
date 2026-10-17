@@ -26,7 +26,7 @@
         <div class="kpi"><small>Ya pagado</small><b class="pos">${dinero(pagado)}</b><em>¡sigue así!</em></div>`;
 
       if (!deudas.length) {
-        listado.innerHTML = '<div class="panel vacio">Aún no registras deudas. Si no tienes, ¡felicitaciones! 🎉</div>';
+        listado.innerHTML = '<div class="panel vacio">Aún no registras deudas. Si no tienes, ¡felicitaciones!</div>';
         return;
       }
       listado.innerHTML = deudas.map((d) => {
@@ -37,7 +37,7 @@
         return `<article class="panel deuda-tarjeta" data-id="${d.id_deuda}">
           <div class="deuda-cabecera">
             <div><h3>${esc(d.acreedor)}</h3>${d.descripcion ? `<p class="sub" style="margin:2px 0 0">${esc(d.descripcion)}</p>` : ''}</div>
-            <span class="pildora ${pagada ? '' : vencida ? 'alta' : 'media'}">${pagada ? 'Pagada ✓' : vencida ? 'Vencida' : 'Al día'}</span>
+            <span class="pildora ${pagada ? '' : vencida ? 'alta' : 'media'}">${pagada ? 'Pagada' : vencida ? 'Vencida' : 'Al día'}</span>
           </div>
           <div class="progreso" aria-label="Avance ${avance}%"><i style="width:${avance}%"></i></div>
           <div class="deuda-datos">
@@ -69,7 +69,7 @@
     try {
       await api('/deudas', { method: 'POST', cuerpo });
       e.target.reset();
-      avisar('Deuda registrada ✓', 'ok');
+      avisar('Deuda registrada', 'ok');
       cargar();
     } catch (err) { avisar(err.message); }
   });

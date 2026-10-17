@@ -2,8 +2,7 @@
 (() => {
   const { api } = window.APSesion;
   const { esc, fecha, $, barra, intentar } = window.UI;
-  const iconoTipo = { ahorro: '🐷', gasto: '✂️', deuda: '💳', educacion: '🎓', inversion: '📈' };
-  const iconoLogro = { 'Primer paso': '👣', 'Ahorrador novato': '🐷', 'Meta cumplida': '🎯', 'Primero ahorro, luego gasto': '💰', 'Libre de deudas': '🕊️', 'Estudiante financiero': '🎓', Inversionista: '📈', Constante: '🔥' };
+  const iconoLogro = { 'Primer paso': '', 'Ahorrador novato': '', 'Meta cumplida': '', 'Primero ahorro, luego gasto': '', 'Libre de deudas': '', 'Estudiante financiero': '', Inversionista: '', Constante: '' };
   // Qué mide cada reto, para que se entienda por qué avanza solo
   const COMO = {
     1: 'Avanza cada día que pasa sin registrar gastos en "Compras impulsivas". Si registras uno, vuelve a empezar la racha.',
@@ -23,7 +22,7 @@
       $('#puntosDetalle').textContent = `${l.puntosLogros} por logros · ${l.puntosRetos} por retos${l.recompensas.nivelActual ? ` · Nivel: ${l.recompensas.nivelActual.emoji} ${l.recompensas.nivelActual.nombre}` : ''}`;
       const ganados = l.logros.filter((x) => x.obtenido).length;
       $('#logrosCuenta').textContent = `${ganados} de ${l.logros.length} desbloqueados`;
-      $('#logros').innerHTML = l.logros.map((x) => `<div class="logro ${x.obtenido ? 'ganado' : ''}"><div class="medalla">${iconoLogro[x.nombre] || '🏅'}</div><b>${esc(x.nombre)}</b><small>${esc(x.descripcion)}</small><br><small><b>${x.puntos} pts</b>${x.obtenido ? ` · ${fecha(x.obtenido_en)}` : ' · bloqueado'}</small></div>`).join('');
+      $('#logros').innerHTML = l.logros.map((x) => `<div class="logro ${x.obtenido ? 'ganado' : ''}"><div class="medalla">${iconoLogro[x.nombre] || ''}</div><b>${esc(x.nombre)}</b><small>${esc(x.descripcion)}</small><br><small><b>${x.puntos} pts</b>${x.obtenido ? ` · ${fecha(x.obtenido_en)}` : ' · bloqueado'}</small></div>`).join('');
       recompensas(l.recompensas);
       dibujar();
     } catch (e) { $('#retos').innerHTML = `<div class="panel vacio">${esc(e.message)}</div>`; }
@@ -34,8 +33,8 @@
       const falta = Math.max(0, n.puntos - rec.puntos.total);
       return `<article class="panel recompensa ${n.reclamada ? 'reclamada' : n.alcanzado ? '' : 'bloqueada'}">
         <div class="medalla">${n.emoji}</div><h3>${esc(n.nombre)}</h3><p class="sub" style="margin:0">${n.puntos} puntos</p>
-        <p style="margin:0;font-size:14px">🎁 ${esc(n.premio)}</p>
-        ${n.reclamada ? '<span class="estado-pill cumplida">Reclamada ✓</span>'
+        <p style="margin:0;font-size:14px">${esc(n.premio)}</p>
+        ${n.reclamada ? '<span class="estado-pill cumplida">Reclamada</span>'
           : n.disponible ? `<button class="boton-ap principal chico" data-reclamar="${n.clave}">Reclamar recompensa</button>`
             : `${barra(Math.min(100, (rec.puntos.total / n.puntos) * 100))}<small class="texto-suave">Te faltan ${falta} puntos</small>`}
       </article>`;
@@ -47,12 +46,12 @@
       const enCurso = r.estado === 'en_curso';
       const hecho = r.estado === 'completado';
       return `<article class="panel meta-tarjeta" data-id="${r.id_reto}">
-        <div class="deuda-cabecera"><h3>${iconoTipo[r.tipo] || '⭐'} ${esc(r.titulo)}</h3><span class="etiqueta-mini">${r.puntos} pts</span></div>
+        <div class="deuda-cabecera"><h3>${esc(r.titulo)}</h3><span class="etiqueta-mini">${r.puntos} pts</span></div>
         <p class="sub" style="margin:0">${esc(r.descripcion)}</p>
-        <div class="texto-suave">Duración: ${r.duracion_dias} días${COMO[r.id_reto] ? `<br>🔄 ${esc(COMO[r.id_reto])}` : ''}</div>
+        <div class="texto-suave">Duración: ${r.duracion_dias} días${COMO[r.id_reto] ? `<br>${esc(COMO[r.id_reto])}` : ''}</div>
         ${enCurso ? `${barra(r.progreso)}<div class="meta-cifras"><span><b>${Math.round(r.progreso)}%</b> completado (automático)</span><span>${r.dias_restantes} día(s) restantes</span></div>
           <div class="deuda-acciones"><button class="mini rojo" data-abandonar>Abandonar reto</button></div>`
-          : hecho ? '<span class="estado-pill cumplida">Completado 🏆</span><div class="deuda-acciones"><button class="mini" data-unirse>Repetir reto</button></div>'
+          : hecho ? '<span class="estado-pill cumplida">Completado</span><div class="deuda-acciones"><button class="mini" data-unirse>Repetir reto</button></div>'
             : `<div class="deuda-acciones"><button class="mini verde" data-unirse>¡Aceptar el reto!</button></div>${r.estado === 'abandonado' ? '<div class="texto-suave">No se completó antes. ¡Puedes intentarlo otra vez!</div>' : ''}`}
       </article>`;
     }).join('');

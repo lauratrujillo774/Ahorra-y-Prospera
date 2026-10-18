@@ -14,6 +14,43 @@
     });
   }
 
+  // ---------- Menú lateral en móvil (hamburguesa) ----------
+  const lateral = document.querySelector('.sidebar');
+  const barra = document.querySelector('.topbar');
+  if (lateral && barra) {
+    const abrir = document.createElement('button');
+    abrir.type = 'button';
+    abrir.className = 'menu-panel-boton';
+    abrir.setAttribute('aria-label', 'Abrir menú');
+    abrir.setAttribute('aria-expanded', 'false');
+    abrir.textContent = '☰';
+    barra.insertBefore(abrir, barra.firstChild);
+
+    const cerrar = document.createElement('button');
+    cerrar.type = 'button';
+    cerrar.className = 'sidebar-cerrar';
+    cerrar.setAttribute('aria-label', 'Cerrar menú');
+    cerrar.textContent = '✕';
+    lateral.appendChild(cerrar);
+
+    const fondo = document.createElement('div');
+    fondo.className = 'sidebar-fondo';
+    document.body.appendChild(fondo);
+
+    const poner = (abierto) => {
+      lateral.classList.toggle('abierto', abierto);
+      fondo.classList.toggle('visible', abierto);
+      document.body.classList.toggle('menu-abierto', abierto);
+      abrir.setAttribute('aria-expanded', String(abierto));
+    };
+    abrir.addEventListener('click', () => poner(true));
+    cerrar.addEventListener('click', () => poner(false));
+    fondo.addEventListener('click', () => poner(false));
+    lateral.addEventListener('click', (e) => { if (e.target.closest('nav a')) poner(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') poner(false); });
+    window.matchMedia('(min-width: 761px)').addEventListener('change', (e) => { if (e.matches) poner(false); });
+  }
+
   // ---------- Menú de perfil ----------
   const perfil = document.querySelector('.profile');
   if (perfil) {

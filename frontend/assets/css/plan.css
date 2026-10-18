@@ -455,3 +455,28 @@ body:not(.light) .foto-grande { border-color: #0e1d17; }
 
 /* Sin iconos: ocultar contenedores que quedaron vacíos */
 .notif-ic:empty, .tipo-ic:empty, .icono-rec:empty, .medalla:empty, .mov-ic:empty { display: none; }
+
+/* ===== Móvil: menú lateral tipo hamburguesa ===== */
+.menu-panel-boton { display: none; flex: none; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel, #fff); color: var(--txt); font-size: 22px; line-height: 1; cursor: pointer; }
+.sidebar-fondo, .sidebar-cerrar { display: none; }
+html, body { overflow-x: hidden; }
+.main, main { min-width: 0; }
+.main img, .main canvas, .main video, .main input, .main select, .main textarea { max-width: 100%; }
+@media (max-width: 760px) {
+    .menu-panel-boton { display: grid; place-items: center; }
+    .topbar { gap: 12px; align-items: center; }
+    .topbar > div:not(.actions) { flex: 1 1 0; min-width: 0; }
+    .topbar h1 { font-size: 22px; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; flex-direction: column; align-items: stretch; width: min(300px, 86vw); height: 100%; padding: 22px 16px; gap: 0; overflow: hidden; transform: translateX(-105%); transition: transform .28s ease; z-index: 70; }
+    .sidebar.abierto { transform: none; box-shadow: 12px 0 40px rgba(0, 0, 0, .3); }
+    .sidebar .brand { margin: 0 4px 16px; }
+    .sidebar .brand > div { display: block; }
+    .sidebar nav { display: grid; grid-template-columns: 1fr; grid-auto-rows: max-content; gap: 4px; overflow-y: auto; overflow-x: hidden; padding: 2px 4px 16px 0; }
+    .sidebar nav a { white-space: normal; padding: 13px 14px; font-size: 15px; }
+    .sidebar-cerrar { display: grid; place-items: center; position: absolute; top: 16px; right: 14px; width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: var(--txt); font-size: 22px; cursor: pointer; }
+    .sidebar-fondo { display: block; position: fixed; inset: 0; background: rgba(7, 43, 32, .5); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 65; }
+    .sidebar-fondo.visible { opacity: 1; pointer-events: auto; }
+    body.menu-abierto { overflow: hidden; }
+    .main, main { padding: 18px 14px; }
+    .panel-notif { top: 66px; left: 12px; right: 12px; width: auto; }
+}
